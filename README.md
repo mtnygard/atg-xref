@@ -1,0 +1,31 @@
+# ATG Xref
+
+Indexing, search, and cross-reference for the BestBuy.com ATG
+codebase.
+
+## Getting Started
+
+First, run the Solr server that comes with this install:
+
+    cd server
+    java -jar start.jar
+
+Now, index the ATG codebase from another terminal (Solr will take over
+your first one.)
+
+    cd indexer
+    java -jar atg-xref-1.0.0-SNAPSHOT-standalone.jar ../bestbuy/dotcom/dgt
+
+## Querying
+
+So far, I haven't put a UI in front of the query engine. You can use
+the Solr [admin GUI][http://localhost:8983/solr/admin] to run some
+queries, if you don't mind reading XML for the results. Try out a
+couple of queries like these examples.
+
+* [Modules which require dgt.common][http://localhost:8983/solr/select/?q=required%3Adgt.common]
+* [Values from LIB-COMMON itself][http://localhost:8983/solr/select/?q=LIB-COMMON]
+
+## License
+
+Copyright (C) 2011 N6 Consulting LLC, All Rights Reserved
