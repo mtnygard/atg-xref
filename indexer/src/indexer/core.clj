@@ -1,4 +1,4 @@
-(ns atg-xref.core
+(ns indexer.core
   (:use [atg module manifest])
   (:use [clojure.contrib.io :only (as-file)])
   (:use [clojure.contrib.str-utils2 :only (split)])
