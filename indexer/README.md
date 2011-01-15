@@ -9,7 +9,7 @@ At present, this only knows how to index ATG modules.
 The whole program is packaged as an uberjar, so you can run it
 straight from the command line:
 
-    java -jar atg-xref-1.0.0-SNAPSHOT-standalone.jar <path_to_codebase>
+    java -jar atg-xref-indexer-1.0.0-SNAPSHOT-standalone.jar <path_to_codebase>
 
 This indexer knows some specifics about a certain large retailer's codebase. Therefore, it expects to find "apps", "zones", and "modules" underneath the root of the codebase.
 
