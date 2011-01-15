@@ -1,8 +1,9 @@
 (ns webui.core
   (:use compojure.core
-        ring.adapter.jetty
         compojure.response
-        [ring.util.response :only (response content-type)]
+        [ring.adapter.jetty :only [run-jetty]]
+        [ring.util.response :only [response content-type]]
+        [ring.middleware.file :only [wrap-file]]
         fleet)
   (:require [compojure.route :as route])
   (:gen-class))
@@ -17,5 +18,8 @@
   (GET "/" [] (views/index))
   (route/not-found "<h1>Page not found</h1>"))
 
+(def app (-> main-routes
+             (wrap-file "public")))
+
 (defn -main [& args]
-  (run-jetty main-routes {:port 8080}))
+  (run-jetty (var app) {:port 8080}))
