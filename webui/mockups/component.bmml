@@ -1,0 +1,94 @@
+<mockup version="1.0" skin="sketch" measuredW="952" measuredH="824" mockupW="723" mockupH="817">
+  <controls>
+    <control controlID="0" controlTypeID="com.balsamiq.mockups::BrowserWindow" x="229" y="7" w="723" h="817" measuredW="450" measuredH="400" zOrder="0" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>ATG%20XRef%20UI%0Ahttp%3A//</text>
+      </controlProperties>
+    </control>
+    <control controlID="1" controlTypeID="com.balsamiq.mockups::BreadCrumbs" x="244" y="158" w="-1" h="-1" measuredW="333" measuredH="23" zOrder="1" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Home%2C%20Components%2C%20atg%2C%20dynamo%2C%20Configuration</text>
+      </controlProperties>
+    </control>
+    <control controlID="2" controlTypeID="com.balsamiq.mockups::SearchBox" x="772" y="102" w="147" h="-1" measuredW="64" measuredH="25" zOrder="5" locked="false" isInGroup="-1"/>
+    <control controlID="3" controlTypeID="com.balsamiq.mockups::Title" x="244" y="87" w="-1" h="-1" measuredW="185" measuredH="56" zOrder="4" locked="false" isInGroup="-1">
+      <controlProperties>
+        <color>13421772</color>
+        <text>ATG%20XRef</text>
+      </controlProperties>
+    </control>
+    <control controlID="7" controlTypeID="com.balsamiq.mockups::Canvas" x="236" y="80" w="709" h="70" measuredW="100" measuredH="70" zOrder="3" locked="false" isInGroup="-1">
+      <controlProperties>
+        <color>3700253</color>
+      </controlProperties>
+    </control>
+    <control controlID="13" controlTypeID="__group__" x="266" y="213" w="332" h="37" measuredW="332" measuredH="37" zOrder="6" locked="false" isInGroup="-1">
+      <groupChildrenDescriptors>
+        <control controlID="0" controlTypeID="com.balsamiq.mockups::SubTitle" x="26" y="0" w="-1" h="-1" measuredW="306" measuredH="37" zOrder="0" locked="false" isInGroup="13">
+          <controlProperties>
+            <text>/atg/dynamo/Configuration</text>
+          </controlProperties>
+        </control>
+        <control controlID="1" controlTypeID="com.balsamiq.mockups::Icon" x="0" y="7" w="-1" h="-1" measuredW="24" measuredH="24" zOrder="1" locked="false" isInGroup="13">
+          <controlProperties>
+            <icon>GeoLocationIcon%7Csmall</icon>
+          </controlProperties>
+        </control>
+      </groupChildrenDescriptors>
+    </control>
+    <control controlID="18" controlTypeID="com.balsamiq.mockups::SubTitle" x="285" y="269" w="-1" h="-1" measuredW="92" measuredH="29" zOrder="2" locked="false" isInGroup="-1">
+      <controlProperties>
+        <size>18</size>
+        <text>Definitions</text>
+      </controlProperties>
+    </control>
+    <control controlID="21" controlTypeID="__group__" x="285" y="298" w="107" h="24" measuredW="107" measuredH="24" zOrder="7" locked="false" isInGroup="-1">
+      <groupChildrenDescriptors>
+        <control controlID="0" controlTypeID="com.balsamiq.mockups::Icon" x="0" y="0" w="-1" h="-1" measuredW="24" measuredH="24" zOrder="0" locked="false" isInGroup="21">
+          <controlProperties>
+            <icon>CellBarsIcon%7Csmall</icon>
+          </controlProperties>
+        </control>
+        <control controlID="1" controlTypeID="com.balsamiq.mockups::Label" x="33" y="0" w="-1" h="-1" measuredW="74" measuredH="23" zOrder="1" locked="false" isInGroup="21">
+          <controlProperties>
+            <text>dgt.common</text>
+          </controlProperties>
+        </control>
+      </groupChildrenDescriptors>
+    </control>
+    <control controlID="22" controlTypeID="com.balsamiq.mockups::TextArea" x="291" y="322" w="574" h="199" measuredW="200" measuredH="140" zOrder="8" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>%23%20/atg/dynamo/Configuration%0A%23Thu%20Jul%2025%2011%3A44%3A52%20IST%202002%0AgsaInvalidatorEnabled%3Dtrue%0A%23%20SCR%23%20MUCHL00005757%20FP%20%26%20S%20starts%0AthreatMetrixOn%3Dfalse%0A%23%20SCR%23%20MUCHL00005757%20FP%20%26%20S%20Ends%0A%23SCR-MUCHL00006087%20%20SSO%20changes%20start%0AmqProviderURL%3Dfile%3A///opt/webcontent/bindings%0A%23SCR-MUCHL00006087%20%20SSO%20changes%20End</text>
+      </controlProperties>
+    </control>
+    <control controlID="23" controlTypeID="com.balsamiq.mockups::TextArea" x="291" y="575" w="574" h="197" measuredW="200" measuredH="140" zOrder="9" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>%24class%3Dcom.bby.service.BBYConfiguration%0A%23%20Default%20setting%20for%20CF%20points%20to%20this%20property%20so%20ensure%20it%20is%20defined%2C%20but%20disabled.%0A%23%20Enable%20lock%20server%20in%20ATG-Data.%0AuseLockServer%3Dfalse%0AakamaiEnabled%3D%5C%0A%20%20%20%20%20%20esiday_0045_30%3D0%2C%5C%0A%20%20%20%20%20%20esiday_0015_30%3D0%2C%5C%0A%20%20%20%20%20%20esiday_0115_30%3D0%2C%5C%0A%20%20%20%20%20%20esiday_0400_30%3D0%2C%5C%0A%20%20%20%20%20%20esihours_0130_4_1%3D0%2C%5C%0A%20%20%20%20%20%20pdp%3D0%0A%09%09%09%09%09%09%0AkioskApplication%3Dfalse%0A%23session%20confirmation%20number%20doesn%27t%20fail%20over%2C%20resulting%20in%20HTTP%20409%20status%20code%20messages%20in%20the%20browser%0A%23work%20around%20is%20to%20set%20these%20properties%20to%20false%0AenforceSessionConfirmation%3Dfalse%0AwarnOnSessionConfirmationFailure%3Dfalse%0A%23Added%20as%20part%20of%20SEO%20CQ%20DTCOM00002687%20%0AseoCategoryEnabled%3Dtrue%0AhomePageUrl%3Dhttp%3A//www.bestbuy.com%0AproductSeoEnabled%3Dtrue%0A%23MUCHL00005154-5752%20MCCP%20Agent%20Pickup%20Changes%20Start%0AgiftReceiptFlag%3Dfalse%0AagentPickup%3Dtrue%0AgiftReceipt%3Dtrue%0A%23MUCHL00005154-5752%20MCCP%20Agent%20Pickup%20Changes%20end</text>
+      </controlProperties>
+    </control>
+    <control controlID="24" controlTypeID="__group__" x="276" y="551" w="133" h="24" measuredW="133" measuredH="24" zOrder="10" locked="false" isInGroup="-1">
+      <groupChildrenDescriptors>
+        <control controlID="0" controlTypeID="com.balsamiq.mockups::Icon" x="0" y="0" w="-1" h="-1" measuredW="24" measuredH="24" zOrder="0" locked="false" isInGroup="24">
+          <controlProperties>
+            <icon>CellBarsIcon%7Csmall</icon>
+          </controlProperties>
+        </control>
+        <control controlID="1" controlTypeID="com.balsamiq.mockups::Label" x="33" y="0" w="-1" h="-1" measuredW="100" measuredH="23" zOrder="1" locked="false" isInGroup="24">
+          <controlProperties>
+            <text>dgt.das-common</text>
+          </controlProperties>
+        </control>
+      </groupChildrenDescriptors>
+    </control>
+    <control controlID="25" controlTypeID="com.balsamiq.mockups::StickyNote" x="671" y="341" w="181" h="93" measuredW="109" measuredH="123" zOrder="11" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>text%20is%20syntax%20colored%20for%20readability</text>
+      </controlProperties>
+    </control>
+    <control controlID="26" controlTypeID="com.balsamiq.mockups::StickyNote" x="577" y="603" w="250" h="155" measuredW="109" measuredH="123" zOrder="12" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>class%20names%20are%20linked%20to%20class%20pages%0A%20%0Acomponent%20names%20are%20linked%20to%20component%20pages</text>
+      </controlProperties>
+    </control>
+  </controls>
+</mockup>
