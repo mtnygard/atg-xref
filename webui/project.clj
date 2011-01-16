@@ -5,6 +5,6 @@
                  [org.clojars.kjw/solrj "1.4.0"]
                  [fleet "0.9.4"]
                  [compojure "0.5.3"]
-                 [ring/ring-jetty-adapter "0.3.1"]]
+                 [ring "0.3.5"]]
   :dev-dependencies [[swank-clojure "1.2.1"]]
-  :main webui.core)
+)

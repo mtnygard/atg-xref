@@ -1,0 +1,24 @@
+<!doctype html>  
+
+<html>
+
+<(preamble)>
+
+<body>
+
+  <div id="container">
+    <(header)>
+      
+    <div id="main" role="main">
+      <(breadcrumbs (:breadcrumbs data))>
+      <(searchbox)>
+      
+      <(raw (:body data))>
+    </div>
+
+    <(footer)>
+  </div>
+
+  <(postscript)>
+</body>
+</html>
