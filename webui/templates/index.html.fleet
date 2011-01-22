@@ -1,18 +1,3 @@
-<div id="modules" class="summarylist">
-  <h2><a href="/modules">Modules</a></h2>
-  
-  <p>Nothing here yet...</p>
-</div>
-
-<div id="components" class="summarylist">
-  <h2><a href="/components">Components</a></h2>
-
-  <p>Nothing here yet...</p>
-</div>
-
-<div id="classes" class="summarylist">
-  <h2><a href="/classes">Classes</a></h2>
-
-  <p>Nothing here yet...</p>
-</div>
-
+<(modules (:modules data))>
+<(components (:components data))>
+<(classes (:components data))>

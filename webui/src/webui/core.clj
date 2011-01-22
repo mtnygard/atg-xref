@@ -1,5 +1,6 @@
 (ns webui.core
   (:use webui.nav
+        webui.search
         [clojure.java.io]
         [compojure core response]
         [ring.adapter.jetty :only [run-jetty]]
@@ -13,25 +14,32 @@
   fleet.util.CljString
   (render [this _] (response (.toString this))))
 
-(defn index-page [] (view/index))
+(defn link-to [m] {:link (str "/modules/" (.get m "name")) :name (.get m "name")})
 
-(defn modules-page [] (view/modules))
+(defn index-page [] (view/index {:modules (map link-to (modules-matching "*"))}))
+
+(defn modules-page [] (view/modules (map link-to (modules-matching "*"))))
+
+(defn components-page [] (view/components))
+
+(defn classes-page [] (view/classes))
 
 (defroutes main-routes
   (GET "/" [] (view/layout {:breadcrumbs (home-crumbs) :body (index-page)}))
   (GET "/modules" [] (view/layout {:breadcrumbs (modules-crumbs) :body (modules-page)}))
+  (GET "/components" [] (view/layout {:breadcrumbs (components-crumbs) :body (components-page)}))
+  (GET "/classes" [] (view/layout {:breadcrumbs (classes-crumbs) :body (classes-page)}))
   (route/not-found (file "public/404.html")))
 
 (def app (-> main-routes
-             (wrap-reload '(webui.core))
-             (wrap-reload '(view))
-             (wrap-reload '(helpers))
+             (wrap-reload '(webui.core view helpers webui.nav))
              (wrap-file "public")
              (wrap-file-info)
              (wrap-stacktrace)))
 
 (defn start-server
   []
+  (initialize-solr)
   (def *server* (agent (run-jetty #'app {:port 8080}))))
 
 (defn -main [& args]
