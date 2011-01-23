@@ -31,16 +31,18 @@
   (GET "/classes" [] (view/layout {:breadcrumbs (classes-crumbs) :body (classes-page)}))
   (route/not-found (file "public/404.html")))
 
-(def app (-> main-routes
-             (wrap-reload '(webui.core view helpers webui.nav))
-             (wrap-file "public")
-             (wrap-file-info)
-             (wrap-stacktrace)))
+(defn app-routes
+  []
+  (-> main-routes
+      (wrap-solr "http://localhost:8983/solr")
+      (wrap-reload '(webui.core view helpers webui.nav))
+      (wrap-file "public")
+      (wrap-file-info)
+      (wrap-stacktrace)))
 
 (defn start-server
   []
-  (initialize-solr)
-  (def *server* (agent (run-jetty #'app {:port 8080}))))
+  (run-jetty (app-routes) {:port 8080 :join? false}))
 
 (defn -main [& args]
   (start-server))
