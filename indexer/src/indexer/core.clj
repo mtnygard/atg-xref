@@ -1,5 +1,5 @@
 (ns indexer.core
-  (:use [atg manifest])
+  (:use [atg module])
   (:use [clojure.contrib.io :only (as-file)])
   (:use [clojure.contrib.str-utils2 :only (split)])
   (:import [java.io File FileNotFoundException])
@@ -7,9 +7,6 @@
   (:import [org.apache.solr.common SolrInputDocument])
   (:import [org.apache.solr.client.solrj.impl CommonsHttpSolrServer])
   (:gen-class))
-
-(defn files-with-extension [^File dir extension]
-  (filter #(.endsWith (.getPath %) extension) (file-seq dir)))
 
 (def *solr-server*)
 
@@ -29,12 +26,13 @@
 
 (defn module-components
   [ms]
-  [])
+  
+  )
 
 (defn index-components
   [ms]
-  #_(.add *solr-server* (map module-components ms))
-  )
+  (.add *solr-server* (map module-components ms))
+  (.commit *solr-server*))
 
 (defn map->solr-input
   [m]
@@ -65,4 +63,4 @@
   (with-connection "http://localhost:8983/solr"
     (let [ms (load-modules root)]
       (index-modules ms)
-      (index-components ms))))
+      #_(index-components ms))))

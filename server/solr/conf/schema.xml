@@ -175,6 +175,9 @@
     <field name="classpath" type="textgen" indexed="true" stored="true" multiValued="true"/>
     <field name="configpath" type="textgen" indexed="false" stored="true" multiValued="true"/>
 
+    <field name="component" type="string" indexed="true" stored="true" required="false"/>
+    <field name="classname" type="string" indexed="true" stored="true" required="false"/>
+
     <field name="text" type="text" indexed="true" stored="false" multiValued="true"/>
 
     <dynamicField name="*_i"  type="int"    indexed="true"  stored="true"/>
