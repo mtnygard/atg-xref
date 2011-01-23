@@ -3,7 +3,7 @@
 
   <ul>
     <(map (fn [l] ">
-     <li class="module"><a href="<(:link l)>"><(:name l)></li>
+     <li class="module"><a href="<(:link l)>"><(:name l)></a></li>
     <") data)>
   </ul>
 </div>

@@ -4,16 +4,6 @@
   (:import (java.io FileInputStream))
   (:import (java.util.jar Manifest)))
 
-(defn with-metadata
-  [mf dir]
-  (assoc mf
-    :qname (str "dgt." (.getName dir))
-    :base dir))
-
-(defn read-non-blank-lines
-  [name]
-  (filter (complement blank?) (read-lines name)))
-
 (defn manifest-file
   [dir]
   (file-str dir "/META-INF/MANIFEST.MF"))
@@ -23,26 +13,34 @@
   (Manifest. (FileInputStream. (manifest-file dir))))
 
 (defn name-to-string [kvs]
-  (reduce (fn [coll [k v]] (into coll {(.toString k) v})) {} kvs))
+  (reduce (fn [m [k v]] (assoc m (str k) v)) {} kvs))
 
 (defn parse-manifest
   [base dir]
   "Locate and parse the manifest file for a module with the given directory and qualified name"
-  (with-metadata
-    (name-to-string (.. (java-manifest dir) getMainAttributes))
-    dir))
+  (assoc
+   (name-to-string (.. (java-manifest dir) getMainAttributes))
+   :qname (str "dgt." (.getName dir))
+   :base dir))
 
-(defn is-module?
+(defn has-module-manifest?
   [mdir]
-  "Answers whether the directory could be an ATG module."
+  "Answers whether the directory is an ATG module."
   (.exists (manifest-file mdir)))
 
-(defn module-name [mf]
-  (get mf :qname ""))
+(defn subdirs
+  [d]
+  (filter #(.isDirectory %) (.listFiles d)))
 
-(defn product [mf]
-  (get mf "ATG-Product" ""))
+(defn all-possible-module-directories
+  [root]
+  (flatten (map #(subdirs (file-str root "/" %)) ["apps" "modules" "zones"])))
 
-(defn dependency-list [mf]
-  (re-seq #"\S+" (get mf "ATG-Required" "")))
+(defn module-directories
+  [root]
+  (filter has-module-manifest? (all-possible-module-directories root)))
+
+(defn load-modules
+  [root]
+  (map #(parse-manifest root %) (module-directories root)))
 

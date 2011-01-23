@@ -38,6 +38,10 @@ host.
 I sort of expect that the "server" will usually just be your own
 laptop or workstation.
 
+## TODO
+
+* Use bindings for Solr server reference instead of global ref.
+
 ## License
 
 Copyright (C) 2011 N6 Consulting LLC, All Rights Reserved
