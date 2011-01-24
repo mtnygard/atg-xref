@@ -166,17 +166,9 @@
            when adding a document.
            -->
 
+    <!-- Fields found on all documents -->
     <field name="id" type="string" indexed="true" stored="true" required="true" /> 
-
     <field name="name" type="textgen" indexed="true" stored="true"/>
-    <field name="product" type="textgen" indexed="true" stored="true" required="true"/>
-    <field name="version" type="string" indexed="false" stored="true" required="false"/>
-    <field name="required" type="textgen" indexed="true" stored="true" multiValued="true"/>
-    <field name="classpath" type="textgen" indexed="true" stored="true" multiValued="true"/>
-    <field name="configpath" type="textgen" indexed="false" stored="true" multiValued="true"/>
-
-    <field name="component" type="string" indexed="true" stored="true" required="false"/>
-    <field name="classname" type="string" indexed="true" stored="true" required="false"/>
 
     <field name="text" type="text" indexed="true" stored="false" multiValued="true"/>
 
@@ -198,6 +190,21 @@
 
     <dynamicField name="ignored_*" type="ignored" multiValued="true"/>
     <dynamicField name="attr_*" type="textgen" indexed="true" stored="true" multiValued="true"/>
+
+    <!-- Fields found on modules -->
+    <field name="product" type="textgen" indexed="true" stored="true" required="false"/>
+    <field name="version" type="string" indexed="false" stored="true" required="false"/>
+    <field name="required" type="textgen" indexed="true" stored="true" multiValued="true"/>
+    <field name="classpath" type="textgen" indexed="true" stored="true" multiValued="true"/>
+    <field name="configpath" type="textgen" indexed="false" stored="true" multiValued="true"/>
+
+    <!-- Fields found on components -->
+    <field name="module" type="string" indexed="true" stored="true" required="false"/>
+    <field name="component" type="string" indexed="true" stored="true" required="false"/>
+    <field name="classname" type="string" indexed="true" stored="true" required="false"/>
+    <field name="scope" type="string" indexed="true" stored="true" required="false"/>
+
+    <!-- Fields found on classes -->
 
   </fields>
   

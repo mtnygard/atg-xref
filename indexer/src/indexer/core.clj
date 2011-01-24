@@ -1,11 +1,11 @@
 (ns indexer.core
-  (:use [atg module])
-  (:use [clojure.contrib.io :only (as-file)])
-  (:use [clojure.contrib.str-utils2 :only (split)])
-  (:import [java.io File FileNotFoundException])
-  (:import [org.apache.solr.client.solrj SolrServer])
-  (:import [org.apache.solr.common SolrInputDocument])
-  (:import [org.apache.solr.client.solrj.impl CommonsHttpSolrServer])
+  (:use atg.module
+        [clojure.contrib.io :only (as-file)])
+  (:require clojure.contrib.str-utils2)
+  (:import [java.io File FileNotFoundException]
+           [org.apache.solr.client.solrj SolrServer]
+           [org.apache.solr.common SolrInputDocument]
+           [org.apache.solr.client.solrj.impl CommonsHttpSolrServer])
   (:gen-class))
 
 (def *solr-server*)
@@ -19,48 +19,54 @@
   `(binding [*solr-server* (initialize-solr ~solr-url)]
      ~@body))
 
-(defn split-field [m n] (split (get m n "") #" "))
-
-(defn add-all [doc docn m n]
-  (doall (map #(.addField doc docn %) (split-field m n))))
-
-(defn module-components
-  [ms]
-  
-  )
-
-(defn index-components
-  [ms]
-  (.add *solr-server* (map module-components ms))
-  (.commit *solr-server*))
+(defn nilsafe-split [s re] (if (nil? s) "" (clojure.contrib.str-utils2/split s re)))
 
 (defn map->solr-input
   [m]
   (let [doc (SolrInputDocument.)]
     (doseq [[k v] m]
-      (if (coll? v)
-        (doseq [subval v]
-          (.addField doc (name k) subval))
-        (.addField doc (name k) v)))
+      (if-not (nil? v)
+        (if (coll? v)
+          (doseq [subval v]
+            (.addField doc (name k) subval))
+          (.addField doc (name k) v))))
     doc))
+
+(defn document-for-component
+  [mod sect compf]
+  (let [comp (parse-component mod sect compf)]
+    (map->solr-input
+     {:id (str (:qname mod) ":" (:section comp) ":" (:name comp))
+      :module (:qname mod)
+      :component (:name comp)
+      :classname (:$class comp)
+      :scope (:$scope comp)})))
+
+(defn index-components
+  [m]
+  (for [sect ["config" "liveconfig"]]
+    (let [components (component-names m sect)]
+      (println "indexing" (count components) "from" (:qname m) "[" sect "]")
+      (doseq [c components]
+        (.add *solr-server* (document-for-component m sect c))))))
 
 (defn document-for-module
   [manifest]
   (map->solr-input
-   {:id (get manifest :qname "")
-    :name (get manifest :qname "")
-    :product (get manifest "ATG-Product" "")
-    :required (split-field manifest "ATG-Required")
-    :classpath (split-field manifest "ATG-Class-Path")
-    :configpath (split-field manifest "ATG-Config-Path")}))
+   {:id (:qname manifest)
+    :name (:qname manifest)
+    :product (:ATG-Product manifest)
+    :required (nilsafe-split (:ATG-Required manifest) #" ")
+    :classpath (nilsafe-split (:ATG-Class-Path manifest) #" ")
+    :configpath (nilsafe-split (:ATG-Config-Path manifest) #" ")}))
 
 (defn index-modules
   [ms]
-  (.add *solr-server* (map document-for-module ms))
+  (doseq [m ms]
+    (.add *solr-server* (document-for-module m))
+    (doall (index-components m)))
   (.commit *solr-server*))
 
 (defn -main [root]
   (with-connection "http://localhost:8983/solr"
-    (let [ms (load-modules root)]
-      (index-modules ms)
-      #_(index-components ms))))
+    (index-modules (load-modules root))))
