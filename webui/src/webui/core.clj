@@ -1,6 +1,7 @@
 (ns webui.core
   (:use webui.nav
         webui.search
+        webui.module
         [clojure.java.io]
         [compojure core response]
         [ring.adapter.jetty :only [run-jetty]]
@@ -14,23 +15,7 @@
   fleet.util.CljString
   (render [this _] (response (.toString this))))
 
-(defn link-to [m] {:link (str "/modules/" (.get m "name")) :name (.get m "name")})
-
-(defn index-page [] (view/index {:modules (map link-to (modules-matching "*"))}))
-
-(defn module-properties
-  [qname]
-  {:qname qname
-   :ATG-Product "Foo"
-   :ATG-Required ["dgt.common" "dgt.commerce-api" "dgt.LIB-COMMON"]})
-
-(defn module-components
-  [qname]
-  [])
-
-(defn module-page [qname] (view/module {:module (module-properties qname) :components (module-components qname)}))
-
-(defn modules-page [] (view/modules (map link-to (modules-matching "*"))))
+(defn index-page [] (view/index {:modules (links-to-all-modules)}))
 
 (defn components-page [] (view/components))
 
@@ -48,7 +33,7 @@
   []
   (-> main-routes
       (wrap-solr "http://localhost:8983/solr")
-      (wrap-reload '(webui.core view helpers webui.nav))
+      (wrap-reload '(webui.core webui.module view helpers webui.nav))
       (wrap-file "public")
       (wrap-file-info)
       (wrap-stacktrace)))

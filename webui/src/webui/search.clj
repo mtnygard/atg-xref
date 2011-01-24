@@ -23,7 +23,7 @@
 (defn query-results [qry]
   (.getResults (.query *solr-server* qry)))
 
-(defn modules-matching [pat]
+(defn solr-query [s]
   (query-results
-   (-> (SolrQuery. (str "name:" pat))
+   (-> (SolrQuery. s)
        (.setRows Integer/MAX_VALUE))))
