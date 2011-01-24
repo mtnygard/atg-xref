@@ -18,6 +18,18 @@
 
 (defn index-page [] (view/index {:modules (map link-to (modules-matching "*"))}))
 
+(defn module-properties
+  [qname]
+  {:qname qname
+   :ATG-Product "Foo"
+   :ATG-Required ["dgt.common" "dgt.commerce-api" "dgt.LIB-COMMON"]})
+
+(defn module-components
+  [qname]
+  [])
+
+(defn module-page [qname] (view/module {:module (module-properties qname) :components (module-components qname)}))
+
 (defn modules-page [] (view/modules (map link-to (modules-matching "*"))))
 
 (defn components-page [] (view/components))
@@ -26,6 +38,7 @@
 
 (defroutes main-routes
   (GET "/" [] (view/layout {:breadcrumbs (home-crumbs) :body (index-page)}))
+  (GET ["/modules/:qname" :qname #".*"] [qname] (view/layout {:breadcrumbs (module-crumbs qname) :body (module-page qname)}))
   (GET "/modules" [] (view/layout {:breadcrumbs (modules-crumbs) :body (modules-page)}))
   (GET "/components" [] (view/layout {:breadcrumbs (components-crumbs) :body (components-page)}))
   (GET "/classes" [] (view/layout {:breadcrumbs (classes-crumbs) :body (classes-page)}))

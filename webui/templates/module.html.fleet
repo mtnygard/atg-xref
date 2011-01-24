@@ -1,0 +1,5 @@
+<div id="module">
+  <h1><(get-in data [:module :qname])></h1>
+  
+  
+</div>
