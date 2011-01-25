@@ -1,0 +1,4 @@
+<div id="component">
+  <h1><(get-in data [:component :name])></h1>
+
+</div>

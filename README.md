@@ -40,7 +40,11 @@ laptop or workstation.
 
 ## TODO
 
-* Use bindings for Solr server reference instead of global ref.
+* Flesh out the module and component pages.
+* Paginate module list and component list.
+* Make search box work.
+* Index JSP files, too. Look for bean references.
+* Create high-level "what uses?" page.
 
 ## License
 

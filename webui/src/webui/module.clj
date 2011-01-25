@@ -12,6 +12,8 @@
   [qname]
   [])
 
+(defn module-link [m] {:link (str "/modules/" (.get m "name")) :name (.get m "name")})
+
 (defn modules-named [pat] (solr-query (str "name:" pat)))
 
 (defn modules-crumbs [] (conj (home-crumbs) (crumb "/modules" "Modules")))
@@ -20,6 +22,6 @@
 
 (defn module-page [qname] (view/module {:module (module-properties qname) :components (module-components qname)}))
 
-(defn modules-page [] (view/modules (map link-to (modules-named "*"))))
+(defn modules-page [] (view/modules (map module-link (modules-named "*"))))
 
-(defn links-to-all-modules [] (map link-to (modules-named "*")))
+(defn links-to-all-modules [] (map module-link (modules-named "*")))

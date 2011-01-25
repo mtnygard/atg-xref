@@ -1,5 +1,9 @@
 <div id="components" class="summarylist">
   <h2><a href="/components">Components</a></h2>
 
-  <p>Nothing here yet...</p>
+  <ul>
+    <(map (fn [l] ">
+      <li class="component"><a href="<(:link l)>"><(:name l)></a></li>
+    <") data)>
+  </ul>
 </div>
