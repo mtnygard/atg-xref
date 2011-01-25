@@ -40,11 +40,12 @@
       :module (:qname mod)
       :component (:name comp)
       :classname (:$class comp)
-      :scope (:$scope comp)})))
+      :scope (:$scope comp)
+      :text (:text comp)})))
 
 (defn index-components
   [m]
-  (for [sect ["config" "liveconfig"]]
+  (for [sect ["config" "liveconfig" "cacheconfig"]]
     (let [components (component-names m sect)]
       (println "indexing" (count components) "from" (:qname m) "[" sect "]")
       (doseq [c components]
