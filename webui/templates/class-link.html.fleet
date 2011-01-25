@@ -1,0 +1,4 @@
+<(if-not (nil? data) ">
+  <p>Class: <a href="/classes/<(raw data)>"><(raw data)></a></p>
+<")>
+

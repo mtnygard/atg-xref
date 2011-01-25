@@ -291,7 +291,16 @@ div#main {
 .summarylist h2 {
     text-transform: uppercase;
 }
-    
+
+.definition-in-module {
+    padding-top: 12px;
+}
+
+.source {
+    border: 1px solid #6b8c49; 
+    border-radius: 3px;
+    padding: 4px 4px;
+}    
 
 /*
  * media queries for responsive design

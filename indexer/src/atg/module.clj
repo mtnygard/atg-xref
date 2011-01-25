@@ -25,7 +25,7 @@
   (let [path (component-in-module m sect compn)]
     (assoc
         (name-to-keyword (java-component-properties path))
-      :text (slurp path)
+      :body (slurp path)
       :section sect
       :path path
       :name compn)))

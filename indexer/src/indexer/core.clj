@@ -41,7 +41,7 @@
       :component (:name comp)
       :classname (:$class comp)
       :scope (:$scope comp)
-      :text (:text comp)})))
+      :body (:body comp)})))
 
 (defn index-components
   [m]

@@ -24,7 +24,7 @@
   (GET "/components" [] (view/layout {:breadcrumbs (components-crumbs) :body (components-page)}))
   (GET "/component/*" {{compn "*"} :route-params} (view/layout {:breadcrumbs (component-crumbs compn) :body (component-page compn)}))
   (GET "/classes" [] (view/layout {:breadcrumbs (classes-crumbs) :body (classes-page)}))
-  (route/files "public")
+  (route/files "/")
   (route/not-found (file "public/404.html")))
 
 (def app-routes

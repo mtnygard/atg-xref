@@ -203,6 +203,7 @@
     <field name="component" type="string" indexed="true" stored="true" required="false"/>
     <field name="classname" type="string" indexed="true" stored="true" required="false"/>
     <field name="scope" type="string" indexed="true" stored="true" required="false"/>
+    <field name="body" type="string" indexed="true" stored="true" required="false"/>
 
     <!-- Fields found on classes -->
 

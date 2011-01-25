@@ -1,4 +1,23 @@
 <div id="component">
-  <h1><(get-in data [:component :name])></h1>
+  <h1><(:name data)></h1>
 
+  <div>
+    <h2>Definitions</h2>
+    
+    <(map (fn [d] ">
+      <div class="definition-in-module">
+        <h3><(module-link (.get d "module"))></h3>
+
+        <(class-link (.get d "classname"))>
+        <(if-not (nil? (.get d "scope")) ">
+          <p>Scope: <(.get d "scope")></p>
+        <")>
+
+        <div class="source">
+          <script type="syntaxhighlighter" class="brush: properties"><![CDATA[<(.get d "body")>]]></script>
+        </div>
+      </div>
+    <") (:component-defs data))>
+    </div>
+  </div>
 </div>
