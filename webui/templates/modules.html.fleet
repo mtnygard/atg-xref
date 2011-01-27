@@ -1,9 +1,9 @@
-<div id="modules" class="summarylist">
+<div id="modules">
   <h2><a href="/modules">Modules</a></h2>
 
-  <ul>
+  <ul class="summarylist">
     <(map (fn [l] ">
-     <li class="module"><a href="<(:link l)>"><(:name l)></a></li>
+     <li><a href="<(:link l)>"><(:name l)></a></li>
     <") data)>
   </ul>
 </div>

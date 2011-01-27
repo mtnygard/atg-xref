@@ -239,6 +239,7 @@ header #home {
 header h1 {
     font-size: 32px;
     font-weight: bold;
+    padding: 0px;
 }
 
 #searchbox {
@@ -264,11 +265,11 @@ header h1 {
 }
 
 footer {
-    padding-top:5px;
-    text-align:center;
+    padding-top: 5px;
+    text-align: center;
     margin: 22px 0px 0px 0px;
-    clear:both;
-    margin-top:-2px;
+    clear: both;
+    margin-top: -2px;
 }	
 
 div#main {
@@ -283,22 +284,34 @@ div#main {
 }
 
 .summarylist {
-    padding-top: 12px;
-    padding-left: 32px;
-    line-height: 1.4;
+    padding-left: 38px;
+    line-height: 1.6;
+    list-style-type: none;
 }
 
-.summarylist h2 {
+h1 {
+    padding-top: 12px;
+    padding-left: 32px;
+    font-size: 22px;
+}
+
+h2 {
+    padding-top: 12px;
+    padding-left: 32px;
+    font-size: 16px;
     text-transform: uppercase;
 }
 
 .definition-in-module {
+    padding-left: 32px;
     padding-top: 12px;
 }
 
 .source {
-    border: 1px solid #6b8c49; 
+    border: 1px solid #6b8c49;
     border-radius: 3px;
+    margin-left: 36px;
+    margin-right: 36px;
     padding: 4px 4px;
 }    
 

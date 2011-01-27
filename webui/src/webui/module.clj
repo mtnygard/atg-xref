@@ -1,5 +1,5 @@
 (ns webui.module
-  (:use [webui search nav])
+  (:use [webui search nav component])
   (:require view))
 
 (defn module-properties
@@ -10,7 +10,8 @@
 
 (defn module-components
   [qname]
-  [])
+  (map component-link
+       (solr-query (str "+module:" qname " +component:*"))))
 
 (defn module-link [m] {:link (str "/modules/" (.get m "name")) :name (.get m "name")})
 
