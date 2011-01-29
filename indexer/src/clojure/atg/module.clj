@@ -1,5 +1,6 @@
 (ns atg.module
-  (:use [clojure.contrib.io :only (file-str input-stream)])
+  (:use [clojure.contrib.io :only (file-str input-stream)]
+        [clojure.string :only (replace)])
   (:import (java.io FileInputStream)
            (java.util.jar Manifest)
            (java.util Properties)))
@@ -20,15 +21,22 @@
   [m sect compn]
   (file-str (:base m) "/" sect compn ".properties"))
 
+(defn component-names-in
+  [body]
+  (map first (re-seq #"(/[a-zA-Z][\w\d]*)+" (replace body #"#.*\n" ""))))
+
 (defn parse-component
   [m sect compn]
-  (let [path (component-in-module m sect compn)]
+  (let [path (component-in-module m sect compn)
+        body (slurp path)]
     (assoc
         (name-to-keyword (java-component-properties path))
-      :body (slurp path)
+      :body body
       :section sect
       :path path
-      :name compn)))
+      :name compn
+      :references (component-names-in body)
+      )))
 
 (defn component-files
   ([m sub]

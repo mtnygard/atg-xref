@@ -201,11 +201,18 @@
     <!-- Fields found on components -->
     <field name="module" type="string" indexed="true" stored="true" required="false"/>
     <field name="component" type="string" indexed="true" stored="true" required="false"/>
-    <field name="classname" type="string" indexed="true" stored="true" required="false"/>
     <field name="scope" type="string" indexed="true" stored="true" required="false"/>
-    <field name="body" type="string" indexed="true" stored="true" required="false"/>
 
     <!-- Fields found on classes -->
+    <field name="package" type="string" indexed="true" stored="true" required="false"/>
+
+    <!-- These fields are shared by components and classes -->
+    <field name="classname" type="string" indexed="true" stored="true" required="false"/>
+    <field name="body" type="string" indexed="true" stored="true" required="false"/>
+
+    <!-- Components will have other component names here. Classes will have other class names. -->
+    <field name="references" type="string" indexed="true" stored="true" required="false" multiValued="true" />
+    <field name="source" type="string" indexed="true" stored="true" required="false" />
 
   </fields>
   

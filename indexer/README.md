@@ -15,7 +15,17 @@ This indexer knows some specifics about a certain large retailer's codebase. The
 
 ## Building
 
-This uses [Leiningen][1]. You should install version 1.3.1 or higher. To create the uberjar, just use:
+This uses [Leiningen][1]. You should install version 1.3.1 or higher. 
+
+First, update the Java grammar:
+
+    lein antlr
+
+Compile the classes created by ANTLR:
+
+    lein javac
+
+Then, create the uberjar:
 
     lein uberjar
 

@@ -1,20 +1,26 @@
 <div id="component">
-  <h1><(:name data)></h1>
+  <h1><(:component data)></h1>
+
+  <div>
+    <h2>Depends On</h2>
+    <(component-list (:uses data))>
+  </div>
 
   <div>
     <h2>Definitions</h2>
     
     <(map (fn [d] ">
       <div class="definition-in-module">
-        <h3><(module-link (.get d "module"))></h3>
+        <h3><(module-link (:module d))></h3>
 
-        <(class-link (.get d "classname"))>
-        <(if-not (nil? (.get d "scope")) ">
-          <p>Scope: <(.get d "scope")></p>
+        <(class-link (:classname d))>
+        <(if-not (nil? (:scope d)) ">
+          <p>Scope: <(:scope d)></p>
         <")>
 
         <div class="source">
-          <script type="syntaxhighlighter" class="brush: properties"><![CDATA[<(.get d "body")>]]></script>
+          <div class="pathname"><(:source d)></div>
+          <script type="syntaxhighlighter" class="brush:properties"><![CDATA[<(:body d)>]]></script>
         </div>
       </div>
     <") (:component-defs data))>

@@ -11,8 +11,6 @@ Run this from the repl as follows:
 $ lein repl
 
 "REPL started; server listening on localhost:11815."
-user=> (use 'view)
-nil
 user=> (use 'webui.core)
 nil
 user=> (def server (start-server))

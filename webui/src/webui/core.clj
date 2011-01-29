@@ -13,7 +13,7 @@
   fleet.util.CljString
   (render [this _] (response (.toString this))))
 
-(defn index-page [] (view/index {:modules (links-to-all-modules)}))
+(defn index-page [] (view/index {:modules (links-to-all-modules) :components (links-to-top-components)}))
 
 (defn classes-page [] (view/classes))
 
