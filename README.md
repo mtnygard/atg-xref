@@ -41,7 +41,7 @@ laptop or workstation.
 ## TODO
 
 * Flesh out the module and component pages.
-** Show components in a module.
+** Show components in a module. (was working, now broken.)
 * Paginate module list and component list.
 * Make search box work.
 * Index JSP files, too. Look for bean references.
