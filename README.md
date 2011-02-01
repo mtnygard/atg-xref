@@ -40,12 +40,26 @@ laptop or workstation.
 
 ## TODO
 
-* Flesh out the module and component pages.
-* Paginate module list and component list.
-* Make search box work.
-* Index JSP files, too. Look for bean references.
-* Create high-level "what uses?" page.
-* Filter out URLs and filenames that look like component names.
+* General
+** Make search box work
+** Pagination
+** Create high-level "what uses?" page.
+
+* Components
+** Filter out URLs and filenames that look like component names.
+
+* Java classes
+** Index classes
+** Create class page
+** Index packages
+** Create package page
+
+* JSP
+** Look for bean references.
+** Look for B:xxx and E:xxx tags.
+** Look for includes
+** Add JSPs to the home
+** Create JSP page, with syntax highlighting.
 
 ## License
 
