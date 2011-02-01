@@ -23,7 +23,17 @@
 (defn query-results [qry]
   (.getResults (.query *solr-server* qry)))
 
+(defn solr-results->map
+  [doc]
+  (let [res (transient {})]
+    (doseq [field (.getFieldNames doc)]
+      (let [val (.getFieldValue doc field)]
+        (if (instance? java.util.List val)
+          (assoc! res (keyword field) (vec val))
+          (assoc! res (keyword field) val))))
+    (persistent! res)))
+
 (defn solr-query [s]
-  (query-results
-   (-> (SolrQuery. s)
-       (.setRows Integer/MAX_VALUE))))
+  (map solr-results->map (query-results
+                          (-> (SolrQuery. s)
+                              (.setRows Integer/MAX_VALUE)))))

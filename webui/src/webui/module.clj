@@ -2,18 +2,13 @@
   (:use [webui search nav component])
   (:require view))
 
-(defn module-properties
-  [qname]
-  {:qname qname
-   :ATG-Product "Foo"
-   :ATG-Required ["dgt.common" "dgt.commerce-api" "dgt.LIB-COMMON"]})
-
 (defn module-components
   [qname]
-  (map component-link
-       (solr-query (str "+module:" qname " +component:*"))))
+  (map component-link (solr-query (str "+module:" qname " +component:*"))))
 
-(defn module-link [m] {:link (str "/modules/" (.get m "name")) :name (.get m "name")})
+(defn modules-from-solr [query] (map ))
+
+(defn module-link [m] {:link (str "/modules/" (:name m)) :name (:name m)})
 
 (defn modules-named [pat] (solr-query (str "name:" pat)))
 

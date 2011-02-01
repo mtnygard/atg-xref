@@ -3,22 +3,14 @@
         webui.search)
   (:require view))
 
-(defn component-for-document
-  [doc]
-  (let [res (transient {})]
-    (doseq [field (.getFieldNames doc)]
-      (let [val (.getFieldValue doc field)]
-        (if (instance? java.util.List val)
-          (assoc! res (keyword field) (vec val))
-          (assoc! res (keyword field) val))))
-    (persistent! res)))
-
 (defn component-link
   [m]
   (let [cname (if (string? m) m (:component m))]
     {:link (str "/component/" cname) :name cname}))
 
-(defn components-named [pat] (map component-for-document (solr-query (str "component:" pat))))
+(defn components-from-solr [query] (solr-query query))
+
+(defn components-named [pat] (solr-query (str "component:" pat)))
 
 (defn components-crumbs [] (conj (home-crumbs) (crumb "/components" "Components")))
 
