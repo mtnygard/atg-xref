@@ -8,8 +8,6 @@
   (let [cname (if (string? m) m (:component m))]
     {:link (str "/component/" cname) :name cname}))
 
-(defn components-from-solr [query] (solr-query query))
-
 (defn components-named [pat] (solr-query (str "component:" pat)))
 
 (defn components-crumbs [] (conj (home-crumbs) (crumb "/components" "Components")))

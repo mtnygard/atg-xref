@@ -1,12 +1,10 @@
 (ns atg.module
   (:use [clojure.contrib.io :only (file-str input-stream)]
-        [clojure.string :only (replace)])
+        [clojure.java.io :only (file)])
+  (:require [clojure.string :as str])
   (:import (java.io FileInputStream)
            (java.util.jar Manifest)
            (java.util Properties)))
-
-(defn files-with-extension [^File dir extension]
-  (filter #(.endsWith (.getPath %) extension) (file-seq dir)))
 
 (defn name-to-keyword [kvs]
   (reduce (fn [m [k v]] (assoc m (keyword (str k)) v)) {} kvs))
@@ -23,24 +21,20 @@
 
 (defn component-names-in
   [body]
-  (map first (re-seq #"(/[a-zA-Z][\w\d]*)+" (replace body #"#.*\n" ""))))
+  (map first (re-seq #"(/[a-zA-Z][\w\d]*)+" (str/replace body #"#[^\n]*\n" ""))))
+
+(defstruct component :section :name :body :path :references)
 
 (defn parse-component
   [m sect compn]
   (let [path (component-in-module m sect compn)
         body (slurp path)]
-    (assoc
-        (name-to-keyword (java-component-properties path))
-      :body body
-      :section sect
-      :path path
-      :name compn
-      :references (component-names-in body)
-      )))
+    (merge (name-to-keyword (java-component-properties path))
+           (struct component sect compn body path (component-names-in body)))))
 
 (defn component-files
   ([m sub]
-     (files-with-extension (file-str (:base m) "/" sub) ".properties")))
+     (filter (fn [f] (.endsWith (.getPath f) ".properties")) (file-seq (file-str (:base m) "/" sub)))))
 
 (defn- canonicalize
   [m prefix compf]
@@ -75,19 +69,10 @@
   "Answers whether the directory is an ATG module."
   (.exists (manifest-file mdir)))
 
-(defn subdirs
-  [d]
-  (filter #(.isDirectory %) (.listFiles d)))
-
-(defn all-possible-module-directories
-  [root]
-  (flatten (map #(subdirs (file-str root "/" %)) ["apps" "modules" "zones"])))
-
 (defn module-directories
   [root]
-  (filter has-module-manifest? (all-possible-module-directories root)))
+  (filter has-module-manifest? (file-seq (file root))))
 
 (defn load-modules
   [root]
   (map #(parse-manifest root %) (module-directories root)))
-

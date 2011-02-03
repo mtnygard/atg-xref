@@ -1,7 +1,8 @@
 (ns indexer.core
   (:use atg.module
         [clojure.contrib.io :only (as-file)])
-  (:require clojure.contrib.str-utils2)
+  (:require [clojure.contrib.str-utils2 :as str]
+            [clojure.contrib.logging :as log])
   (:import [java.io File FileNotFoundException]
            [org.apache.solr.client.solrj SolrServer]
            [org.apache.solr.common SolrInputDocument]
@@ -19,7 +20,7 @@
   `(binding [*solr-server* (initialize-solr ~solr-url)]
      ~@body))
 
-(defn nilsafe-split [s re] (if (nil? s) "" (clojure.contrib.str-utils2/split s re)))
+(def nilsafe-split (fnil str/split ""))
 
 (defn map->solr-input
   [m]
@@ -49,7 +50,7 @@
   [m]
   (for [sect ["config" "liveconfig" "cacheconfig"]]
     (let [components (component-names m sect)]
-      (println "indexing" (count components) "from" (:qname m) "[" sect "]")
+      (log/info (str "indexing " (count components) " from " (:qname m) " [" sect "]"))
       (doseq [c components]
         (.add *solr-server* (document-for-component m sect c))))))
 
