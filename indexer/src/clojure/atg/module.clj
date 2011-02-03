@@ -19,9 +19,14 @@
   [m sect compn]
   (file-str (:base m) "/" sect compn ".properties"))
 
+(defn cleanse
+  [s pats]
+  (reduce (fn [so-far next] (str/replace so-far next "")) s pats))
+
 (defn component-names-in
   [body]
-  (map first (re-seq #"(/[a-zA-Z][\w\d]*)+" (str/replace body #"#[^\n]*\n" ""))))
+  (map first (re-seq #"(/[a-zA-Z][\w\d]*)+"
+                     (cleanse body [#"#[^\n]*\n" #"http(s)?://[^\n]*\n" #"=/[^\n]*.xml\n"]))))
 
 (defstruct component :section :name :body :path :references)
 
