@@ -1,4 +1,5 @@
 <div id="classes">
   <h2><a href="/classes">Classes</a></h2>
 
+  <(list-of-links data)>
 </div>

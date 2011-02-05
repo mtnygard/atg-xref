@@ -1,3 +1,15 @@
-<(modules (:modules data))>
-<(components (:components data))>
-<(classes (:classes data))>
+<div id="moduleplaceholder">
+  <p>Loading...</p>
+</div>
+
+<div id="componentplaceholder">
+  <p>Loading...</p>
+</div>
+
+<div id="classplaceholder">
+  <p>Loading...</p>
+</div>
+
+<div id="jspplaceholder">
+  <p>Loading...</p>
+</div>

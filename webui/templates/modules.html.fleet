@@ -1,9 +1,5 @@
 <div id="modules">
   <h2><a href="/modules">Modules</a></h2>
 
-  <ul class="summarylist">
-    <(map (fn [l] ">
-     <li><a href="<(:link l)>"><(:name l)></a></li>
-    <") data)>
-  </ul>
+  <(list-of-links data)>
 </div>

@@ -1,4 +1,4 @@
-<ul class="summarylist">
+<ul class="paginated summarylist">
   <(map (fn [l] ">
     <li><a href="<(:link l)>"><(:name l)></a></li>
   <") data)>

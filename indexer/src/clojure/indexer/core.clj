@@ -40,7 +40,7 @@
      {:id (str (:qname mod) ":" (:section comp) ":" (:name comp))
       :module (:qname mod)
       :component (:name comp)
-      :classname (:$class comp)
+      :instantiates (:$class comp)
       :scope (:$scope comp)
       :body (:body comp)
       :source (:path comp)

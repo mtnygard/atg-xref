@@ -3,5 +3,5 @@
   
   <h2>Components in <(get-in data [:module :qname])></h2>
 
-  <(component-list (:components data))>
+  <(list-of-links (:components data))>
 </div>

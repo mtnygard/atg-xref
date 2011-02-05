@@ -1,21 +1,18 @@
 (ns webui.core
-  (:use [webui nav search module component]
+  (:use [webui nav search module component classes]
         [clojure.java.io]
         [compojure core response]
         [ring.adapter.jetty :only [run-jetty]]
         [ring.util.response]
         [ring.middleware file file-info stacktrace reload])
   (:require [compojure.route :as route]
-            view)
-  (:gen-class))
+            view))
 
 (extend-protocol Renderable
   fleet.util.CljString
   (render [this _] (response (.toString this))))
 
 (defn index-page [] (view/index {:modules (links-to-all-modules) :components (links-to-top-components)}))
-
-(defn classes-page [] (view/classes))
 
 (defroutes main-routes
   (GET "/" [] (view/layout {:breadcrumbs (home-crumbs) :body (index-page)}))
@@ -24,6 +21,10 @@
   (GET "/components" [] (view/layout {:breadcrumbs (components-crumbs) :body (components-page)}))
   (GET "/component/*" {{compn "*"} :route-params} (view/layout {:breadcrumbs (component-crumbs compn) :body (component-page compn)}))
   (GET "/classes" [] (view/layout {:breadcrumbs (classes-crumbs) :body (classes-page)}))
+  (GET "/v1/modules" [] (modules-page))
+  (GET "/v1/components" [] (components-page))
+  (GET "/v1/classes" [] (classes-page))
+  (GET "/v1/jsps" [] "<p>Coming soon...</p>")
   (route/files "/")
   (route/not-found (file "public/404.html")))
 

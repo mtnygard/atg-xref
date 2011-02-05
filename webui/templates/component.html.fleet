@@ -3,7 +3,7 @@
 
   <div>
     <h2>Depends On</h2>
-    <(component-list (:uses data))>
+    <(list-of-links (:uses data))>
   </div>
 
   <div>
@@ -13,7 +13,7 @@
       <div class="definition-in-module">
         <h3><(module-link (:module d))></h3>
 
-        <(class-link (:classname d))>
+        <(class-link (:instantiates d))>
         <(if-not (nil? (:scope d)) ">
           <p>Scope: <(:scope d)></p>
         <")>
