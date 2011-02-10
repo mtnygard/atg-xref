@@ -1,5 +1,6 @@
 (ns webui.module
-  (:use [webui search nav component])
+  (:use [webui search nav component]
+        clojure.contrib.json)
   (:require view))
 
 (defn module-components
@@ -18,4 +19,14 @@
 
 (defn modules-page [] (view/modules (map module-link (modules-named "*"))))
 
-(defn links-to-all-modules [] (map module-link (modules-named "*")))
+(defn- link-to
+  [m]
+  (let [mname (:name m)
+        link (str "/modules/" mname)]
+    [(str "<a href=\"" link "\">" mname "</a>")]))
+
+(defn module-summaries
+  [pat] (set (map link-to (modules-named pat))))
+
+(defn modules-api
+  [& pat] (json-str {:aaData (module-summaries (or pat "*"))}))

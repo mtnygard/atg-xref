@@ -12,7 +12,7 @@
   fleet.util.CljString
   (render [this _] (response (.toString this))))
 
-(defn index-page [] (view/index {:modules (links-to-all-modules) :components (links-to-top-components)}))
+(defn index-page [] (view/index {:modules (links-to-all-modules)}))
 
 (defroutes main-routes
   (GET "/" [] (view/layout {:breadcrumbs (home-crumbs) :body (index-page)}))
@@ -21,7 +21,7 @@
   (GET "/components" [] (view/layout {:breadcrumbs (components-crumbs) :body (components-page)}))
   (GET "/component/*" {{compn "*"} :route-params} (view/layout {:breadcrumbs (component-crumbs compn) :body (component-page compn)}))
   (GET "/classes" [] (view/layout {:breadcrumbs (classes-crumbs) :body (classes-page)}))
-  (GET "/v1/modules" [] (modules-page))
+  (GET "/v1/modules" [] (modules-api))
   (GET "/v1/components" [] (components-api))
   (GET "/v1/classes" [] (classes-page))
   (GET "/v1/jsps" [] "<p>Coming soon...</p>")

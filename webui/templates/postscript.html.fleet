@@ -26,6 +26,13 @@ $(document).ready(function() {
     "sPaginationType": "full_numbers",
     "sAjaxSource": "/v1/components"
   });
+
+  $('#modules-table').dataTable( {
+    "bProcessing": true,
+    "iDisplayLength": 25,
+    "sPaginationType": "full_numbers",
+    "sAjaxSource": "/v1/modules"
+  });
 });
 </script>
 

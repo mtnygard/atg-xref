@@ -17,7 +17,8 @@
 
 (defn components-page [] (view/components (map component-link (components-named "*"))))
 
-(defn- link-to [m]
+(defn- link-to
+  [m]
   (let [cname (:component m)
         link (str "/component/" cname)]
     [(str "<a href=\"" link "\">" cname "</a>")]))
@@ -36,4 +37,3 @@
                      :component-defs definitions
                      :uses (map component-link references)})))
 
-(defn links-to-top-components [] (map component-link (take 35 (components-named "*"))))

@@ -1,5 +1,22 @@
 <div id="modules">
   <h2><a href="/modules">Modules</a></h2>
 
-  <(list-of-links data)>
+  <div>
+    <table id="modules-table" class="display" cellpadding="0" cellborder="0" width="90%">
+      <thead>
+        <tr>
+	  <th width="100%">Module</th>
+        </tr>
+      </thead>
+      <tbody>
+
+      </tbody>
+      <tfoot>
+        <tr>
+	  <th>Module</th>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+
 </div>
