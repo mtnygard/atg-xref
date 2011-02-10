@@ -22,7 +22,7 @@
   (GET "/component/*" {{compn "*"} :route-params} (view/layout {:breadcrumbs (component-crumbs compn) :body (component-page compn)}))
   (GET "/classes" [] (view/layout {:breadcrumbs (classes-crumbs) :body (classes-page)}))
   (GET "/v1/modules" [] (modules-page))
-  (GET "/v1/components" [] (components-page))
+  (GET "/v1/components" [] (components-api))
   (GET "/v1/classes" [] (classes-page))
   (GET "/v1/jsps" [] "<p>Coming soon...</p>")
   (route/files "/")

@@ -11,7 +11,6 @@
       
     <div id="main" role="main">
       <(breadcrumbs (:breadcrumbs data))>
-      <(searchbox)>
       
       <(raw (:body data))>
     </div>

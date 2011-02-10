@@ -307,6 +307,11 @@ h2 {
     padding-top: 12px;
 }
 
+table.display {
+    padding-left: 32px;
+    padding-top: 12px;
+}
+
 .source {
     border: 1px solid #6b8c49;
     border-radius: 3px;

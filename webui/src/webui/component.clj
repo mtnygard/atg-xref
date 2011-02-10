@@ -1,6 +1,7 @@
 (ns webui.component
   (:use webui.nav
-        webui.search)
+        webui.search
+        clojure.contrib.json)
   (:require view))
 
 (defn component-link
@@ -14,7 +15,18 @@
 
 (defn component-crumbs [comp] (conj (components-crumbs) (crumb (str "/component/" comp) comp)))
 
-(defn components-page [] (view/components (map component-link (take 35 (components-named "*")))))
+(defn components-page [] (view/components (map component-link (components-named "*"))))
+
+(defn- link-to [m]
+  (let [cname (:component m)
+        link (str "/component/" cname)]
+    [(str "<a href=\"" link "\">" cname "</a>")]))
+
+(defn component-summaries
+  [pat] (set (map link-to (components-named pat))))
+
+(defn components-api
+  [& pat] (json-str {:aaData (component-summaries (or pat "*"))}))
 
 (defn component-page
   [comp]

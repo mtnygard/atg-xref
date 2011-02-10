@@ -40,4 +40,7 @@
   <link href="/css/shCore.css" rel="stylesheet" type="text/css" />
   <link href="/css/shThemeDefault.css" rel="stylesheet" type="text/css" />
 
+  <!-- Datatables support -->
+  <link href="/css/demo_table.css" rel="stylesheet" type="text/css" />
+  <link href="/css/demo_page.css" rel="stylesheet" type="text/css" />
 </head>

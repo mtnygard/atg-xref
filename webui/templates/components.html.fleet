@@ -1,5 +1,22 @@
 <div id="components">
   <h2><a href="/components">Components</a></h2>
 
-  <(list-of-links data)>
+  <div>
+    <table id="components-table" class="display" cellpadding="0" cellborder="0" width="90%">
+      <thead>
+        <tr>
+	  <th width="100%">Component</th>
+        </tr>
+      </thead>
+      <tbody>
+
+      </tbody>
+      <tfoot>
+        <tr>
+	  <th>Component</th>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
 </div>
+

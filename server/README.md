@@ -6,6 +6,16 @@ To start this server, just run:
 
     java -jar start.jar
 
+## Clearing out data
+
+Between schema changes or changes to the indexer's semantics, you'll
+often want to clean out the old data:
+
+    rm -r solr/data
+
+It only takes a couple of minutes to reindex everything, so don't
+worry about schema migration.
+
 ## Shutdown
 
 ### Simple
