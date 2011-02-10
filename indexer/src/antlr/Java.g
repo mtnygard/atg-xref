@@ -290,41 +290,35 @@ options {
   output=AST;
 }
 
+tokens {
+  CLASS = 'class';
+  IMPORT = 'import';
+  PACKAGE = 'package';
+  QNAME;
+  STAR = '*';
+  STATIC = 'static';
+  TYPEDECL;
+}
+
+@header        { package indexer.java; }
+@lexer::header { package indexer.java; }
+
 /********************************************************************************************
                           Parser section
 *********************************************************************************************/
            
 compilationUnit 
-    :   (   (annotations
-            )?
-            packageDeclaration
-        )?
-        (importDeclaration
-        )*
-        (typeDeclaration
-        )*
+    :   ( (annotations )? packageDeclaration )?
+        (importDeclaration)*
+        (typeDeclaration)*
     ;
 
 packageDeclaration 
-    :   'package' qualifiedName
-        ';'
+    :   PACKAGE qname=qualifiedName ';' -> ^(PACKAGE $qname)
     ;
 
 importDeclaration  
-    :   'import' 
-        ('static'
-        )?
-        IDENTIFIER '.' '*'
-        ';'       
-    |   'import' 
-        ('static'
-        )?
-        IDENTIFIER
-        ('.' IDENTIFIER
-        )+
-        ('.' '*'
-        )?
-        ';'
+    :   IMPORT (STATIC)? qname=qualifiedName ('.' STAR)? ';' -> ^(IMPORT $qname STATIC? STAR?)
     ;
 
 qualifiedImportName 
@@ -378,11 +372,12 @@ normalClassDeclaration
     :   modifiers  'class' IDENTIFIER
         (typeParameters
         )?
-        ('extends' type
+        ('extends' sup=type
         )?
-        ('implements' typeList
+        ('implements' intfs=typeList
         )?            
         classBody
+        -> ^(TYPEDECL IDENTIFIER $sup? $intfs? classBody)
     ;
 
 
@@ -413,9 +408,10 @@ enumDeclaration
         ('enum'
         ) 
         IDENTIFIER
-        ('implements' typeList
+        ('implements' intfs=typeList
         )?
         enumBody
+        -> ^(TYPEDECL IDENTIFIER $intfs? enumBody)
     ;
     
 
@@ -466,9 +462,10 @@ normalInterfaceDeclaration
     :   modifiers 'interface' IDENTIFIER
         (typeParameters
         )?
-        ('extends' typeList
+        ('extends' intfs=typeList
         )?
         interfaceBody
+        -> ^(TYPEDECL IDENTIFIER $intfs? interfaceBody)
     ;
 
 typeList 
@@ -701,11 +698,8 @@ explicitConstructorInvocation
         arguments ';'
     ;
 
-qualifiedName 
-    :   IDENTIFIER
-        ('.' IDENTIFIER
-        )*
-    ;
+qualifiedName
+    :   IDENTIFIER ('.' IDENTIFIER )* -> {new CommonTree(new CommonToken(QNAME, $qualifiedName.text))};
 
 annotations 
     :   (annotation
@@ -1469,10 +1463,6 @@ CHAR
     :   'char'
     ;
     
-CLASS
-    :   'class'
-    ;
-    
 CONST
     :   'const'
     ;
@@ -1533,9 +1523,6 @@ IMPLEMENTS
     :   'implements'
     ;
 
-IMPORT
-    :   'import'
-    ;
 
 INSTANCEOF
     :   'instanceof'
@@ -1559,10 +1546,6 @@ NATIVE
 
 NEW
     :   'new'
-    ;
-
-PACKAGE
-    :   'package'
     ;
 
 PRIVATE
@@ -1735,10 +1718,6 @@ PLUS
 
 SUB
     :   '-'
-    ;
-
-STAR
-    :   '*'
     ;
 
 SLASH
