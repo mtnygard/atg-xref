@@ -18,5 +18,13 @@
       </tfoot>
     </table>
   </div>
-
 </div>
+
+<script>
+  $('#modules-table').dataTable( {
+    "bProcessing": true,
+    "iDisplayLength": 25,
+    "sPaginationType": "full_numbers",
+    "sAjaxSource": "/v1/modules"
+  });
+</script>

@@ -1,6 +1,6 @@
-<(webui.module/modules-page)>
+<(view/modules)>
 
-<(webui.component/components-page)>
+<(view/components)>
 
 <div id="classplaceholder">
   <p>Loading...</p>
@@ -9,3 +9,4 @@
 <div id="jspplaceholder">
   <p>Loading...</p>
 </div>
+

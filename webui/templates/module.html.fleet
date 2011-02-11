@@ -1,7 +1,61 @@
 <div id="module">
-  <h1><(get-in data [:module :qname])></h1>
+  <h1><(get-in data [:module :name])></h1>
   
-  <h2>Components in <(get-in data [:module :qname])></h2>
+  <div id="modules-required">
+    <h2>Modules required by <(get-in data [:module :name])></h2>
+    <table id="modules-table" class="display" cellpadding="0" cellborder="0" width="90%">
+      <thead>
+        <tr>
+          <th width="100%">Module</th>
+        </tr>
+      </thead>
+      <tbody> 
+        <(map (fn [r] ">
+          <tr><td><a href="/modules/<(raw r)>"><(raw r)></a></td></tr>
+        <") (webui.module/required-by (:module data)))>
+      </tbody>
+      <tfoot>
+        <tr>
+          <th width="100%">Module</th>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
 
-  <(list-of-links (:components data))>
+  <div id="components">
+    <h2>Components in <(get-in data [:module :name])></h2>
+
+    <div>
+      <table id="components-table" class="display" cellpadding="0" cellborder="0" width="90%">
+        <thead>
+          <tr>
+	    <th width="100%">Component</th>
+          </tr>
+        </thead>
+        <tbody>
+          
+        </tbody>
+        <tfoot>
+          <tr>
+	    <th>Component</th>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  </div>
 </div>
+
+<script type="text/javascript" lang="javascript">
+  $('#modules-table').dataTable( {
+    "bProcessing": true,
+    "iDisplayLength": 25,
+    "sPaginationType": "full_numbers",
+  });
+
+  $('#components-table').dataTable( {
+    "bProcessing": true,
+    "iDisplayLength": 25,
+    "sPaginationType": "full_numbers",
+    "sAjaxSource": "<(str "/v1/components/module/" (get-in data [:module :name]))>"
+  });
+</script>

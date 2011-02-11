@@ -12,18 +12,26 @@
   fleet.util.CljString
   (render [this _] (response (.toString this))))
 
-(defn index-page [] (view/index {:modules (links-to-all-modules)}))
+(defn index-page
+  []
+  {:breadcrumbs (home-crumbs)
+   :body (view/index)})
+
+(defn layout-or-404
+  [body]
+  (if body (view/layout body) nil))
 
 (defroutes main-routes
-  (GET "/" [] (view/layout {:breadcrumbs (home-crumbs) :body (index-page)}))
-  (GET ["/modules/:qname" :qname #".*"] [qname] (view/layout {:breadcrumbs (module-crumbs qname) :body (module-page qname)}))
-  (GET "/modules" [] (view/layout {:breadcrumbs (modules-crumbs) :body (modules-page)}))
-  (GET "/components" [] (view/layout {:breadcrumbs (components-crumbs) :body (components-page)}))
-  (GET "/component/*" {{compn "*"} :route-params} (view/layout {:breadcrumbs (component-crumbs compn) :body (component-page compn)}))
+  (GET "/" [] (view/layout (index-page)))
+  (GET ["/modules/:qname" :qname #".*"] [qname] (layout-or-404 (module-page qname)))
+  (GET "/modules" [] (layout-or-404 (modules-page)))
+  (GET "/components" [] (layout-or-404 (components-page)))
+  (GET "/component/*" {{compn "*"} :route-params} (layout-or-404 (component-page compn)))
   (GET "/classes" [] (view/layout {:breadcrumbs (classes-crumbs) :body (classes-page)}))
   (GET "/v1/modules" [] (modules-api))
   (GET "/v1/components" [] (components-api))
-  (GET "/v1/classes" [] (classes-page))
+  (GET ["/v1/components/module/:qname" :qname #".*"] [qname] (components-in-module qname))
+  #_(GET "/v1/classes" [] (classes-api))
   (GET "/v1/jsps" [] "<p>Coming soon...</p>")
   (route/files "/")
   (route/not-found (file "public/404.html")))

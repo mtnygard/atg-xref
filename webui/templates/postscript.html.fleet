@@ -1,8 +1,4 @@
 <!-- Javascript at the bottom for fast page loading -->
-
-<script type="text/javascript" lang="javascript" src="/js/libs/jquery-1.4.4.js"></script>
-<script type="text/javascript" lang="javascript" src="/js/libs/jquery.dataTables.min.js"></script>
-
   
 <!-- scripts concatenated and minified via ant build script-->
 <script src="/js/plugins.js"></script>
@@ -16,24 +12,6 @@ SyntaxHighlighter.autoloader(
 );
  
 SyntaxHighlighter.all();
-</script>
-
-<script type="text/javascript" lang="javascript">
-$(document).ready(function() {
-  $('#components-table').dataTable( {
-    "bProcessing": true,
-    "iDisplayLength": 25,
-    "sPaginationType": "full_numbers",
-    "sAjaxSource": "/v1/components"
-  });
-
-  $('#modules-table').dataTable( {
-    "bProcessing": true,
-    "iDisplayLength": 25,
-    "sPaginationType": "full_numbers",
-    "sAjaxSource": "/v1/modules"
-  });
-});
 </script>
 
 <!--[if lt IE 7 ]>

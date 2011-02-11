@@ -15,8 +15,6 @@
 
 (defn component-crumbs [comp] (conj (components-crumbs) (crumb (str "/component/" comp) comp)))
 
-(defn components-page [] (view/components (map component-link (components-named "*"))))
-
 (defn- link-to
   [m]
   (let [cname (:component m)
@@ -24,16 +22,26 @@
     [(str "<a href=\"" link "\">" cname "</a>")]))
 
 (defn component-summaries
-  [pat] (set (map link-to (components-named pat))))
+  [f] (set (map link-to (f))))
 
 (defn components-api
-  [& pat] (json-str {:aaData (component-summaries (or pat "*"))}))
+  [& pat] (json-str {:aaData (component-summaries #(components-named (or pat "*")))}))
+
+(defn components-in-module
+  [pat] (json-str {:aaData (component-summaries #(solr-query (str "component:* +module:" pat)))}))
 
 (defn component-page
   [comp]
-  (let [definitions (components-named comp)
-        references (set (flatten (map :references definitions)))]
-    (view/component {:name comp
-                     :component-defs definitions
-                     :uses (map component-link references)})))
+  (if-let [defs (components-named comp)]
+    {:breadcrumbs (component-crumbs comp)
+     :body (let [references (set (flatten (map :references defs)))]
+             (view/component {:name comp
+                              :component-defs defs
+                              :uses (map component-link references)}))}
+    nil))
+
+(defn components-page
+  []
+  {:breadcrumbs (components-crumbs)
+   :body (view/components (map component-link (components-named "*")))})
 

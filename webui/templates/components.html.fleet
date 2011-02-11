@@ -20,3 +20,12 @@
   </div>
 </div>
 
+<script type="text/javascript" lang="javascript">
+  $('#components-table').dataTable( {
+    "bProcessing": true,
+    "iDisplayLength": 25,
+    "sPaginationType": "full_numbers",
+    "sAjaxSource": "/v1/components"
+  });
+</script>
+
