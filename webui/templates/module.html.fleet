@@ -9,10 +9,31 @@
           <th width="100%">Module</th>
         </tr>
       </thead>
-      <tbody> 
+      <tbody>
         <(map (fn [r] ">
-          <tr><td><a href="/modules/<(raw r)>"><(raw r)></a></td></tr>
-        <") (webui.module/required-by (:module data)))>
+          <tr><td><(str r)></td></tr>
+        <") (:required-by data))>
+      </tbody>
+      <tfoot>
+        <tr>
+          <th width="100%">Module</th>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+  
+  <div id="modules2">
+    <h2>Modules that require <(get-in data [:module :name])></h2>
+    <table id="modules-requiring" class="display" cellpadding="0" cellborder="0" width="90%">
+      <thead>
+        <tr>
+          <th width="100%">Module</th>
+        </tr>
+      </thead>
+      <tbody>
+        <(map (fn [r] ">
+          <tr><td><(str r)></td></tr>
+        <") (:requiring data))>
       </tbody>
       <tfoot>
         <tr>
@@ -47,6 +68,12 @@
 
 <script type="text/javascript" lang="javascript">
   $('#modules-table').dataTable( {
+    "bProcessing": true,
+    "iDisplayLength": 25,
+    "sPaginationType": "full_numbers",
+  });
+
+  $('#modules-requiring').dataTable( {
     "bProcessing": true,
     "iDisplayLength": 25,
     "sPaginationType": "full_numbers",

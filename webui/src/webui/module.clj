@@ -3,6 +3,15 @@
         clojure.contrib.json
         [clojure.java.io :only (file)]))
 
+(defn- link-to
+  [m]
+  (let [mname (:name m)
+        link (str "/modules/" mname)]
+    (str "<a href=\"" link "\">" mname "</a>")))
+
+(defn module-summaries
+  [f] (set (map link-to (f))))
+
 (defn module-components
   [qname]
   (map component-link (solr-query (str "+module:" qname " +component:*"))))
@@ -11,7 +20,11 @@
 
 (defn required-by
   [{reqd :required}]
-  (if (coll? reqd) reqd (list reqd)))
+  (map #(link-to {:name %}) (if (coll? reqd) reqd (list reqd))))
+
+(defn requiring
+  [mod]
+  (module-summaries #(solr-query (str "required:\"" (:name mod) "\""))))
 
 (defn modules-named [pat] (solr-query (str "name:" pat)))
 
@@ -19,23 +32,17 @@
 
 (defn module-crumbs [mod] (conj (modules-crumbs) (crumb (str "/modules/" mod) mod)))
 
-(defn- link-to
-  [m]
-  (let [mname (:name m)
-        link (str "/modules/" mname)]
-    [(str "<a href=\"" link "\">" mname "</a>")]))
-
-(defn module-summaries
-  [pat] (set (map link-to (modules-named pat))))
-
 (defn modules-api
-  [& pat] (json-str {:aaData (module-summaries (or pat "*"))}))
+  [& pat] (json-str {:aaData (module-summaries #(modules-named (or pat "*")))}))
 
 (defn module-page [qname]
   (let [mod (first (modules-named qname))]
     (if (empty? mod)
       nil
-      {:breadcrumbs (module-crumbs qname) :body (view/module {:module mod})})))
+      {:breadcrumbs (module-crumbs qname)
+       :body (view/module {:module mod
+                           :required-by (required-by mod)
+                           :requiring (requiring mod)})})))
 
 (defn modules-page [] {:breadcrumbs (modules-crumbs)
                        :body (view/modules)})
