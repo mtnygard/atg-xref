@@ -25,44 +25,51 @@
   TokenStreamSource
   (antlr-stream [f] (ANTLRFileStream. (.getPath f))))
 
-(defn token-stream [f] (CommonTokenStream. (JavaLexer. (antlr-stream f))))
-
 (defn parse [f]
-  (let [tokens (token-stream f)
+  (let [tokens (CommonTokenStream. (JavaLexer. (antlr-stream f)))
         parser (JavaParser. tokens)]
     (.getTree (.compilationUnit parser))))
 
-(defn ast-branch? [tn]  (not (zero? (.getChildCount tn))))
-(defn ast-children
-  [n]
-  (if (coll? n)
-    (flatten (map ast-children n))
-    (seq (.getChildren n))))
+(defn token-type [tn] (if (nil? (.getToken tn)) nil (.getType (.getToken tn))))
 
-(defn parse-seq [f] (tree-seq ast-branch? ast-children (parse f)))
+(def lexical-scope-tokens [JavaParser/PACKAGE JavaParser/TYPEDECL])
 
-(defn ast-nodes
-  "Predicate that matches AST tree nodes with the token type tkn.
-   You'll usually want to make a partial for the tokens you actually want to extract"
-  [tkn node] (and (.getToken node) (= tkn (.getType (.getToken node)))))
+(defn qualifiers
+  [tn qs]
+  (let [newq (fn [tn] (.getText (.get (.getChildren tn) 0)))]
+    (conj qs (some #(if (= (token-type tn) %) (newq tn)) lexical-scope-tokens) )))
 
-;;; TODO: Make a macro to build these partials for me.
-(def package-node (partial ast-nodes JavaParser/PACKAGE))
-(def import-node (partial ast-nodes JavaParser/IMPORT))
-(def typedecl-node (partial ast-nodes JavaParser/TYPEDECL))
+(defn mktree
+  ([tn] (mktree tn []))
+  ([tn qs] (list
+            (token-type tn)
+            (.getText tn)
+            (map #(mktree % (qualifiers tn qs)) (seq (.getChildren tn)))
+            (apply str (interpose "." qs)))))
 
-(defn package-decl
-  [ast]
-  (when-let [pkg (first (ast-children (filter package-node ast)))]
-    (.getText pkg)))
+(defn- child-nodes [n] (nth n 2))
+(defn- branch? [n] (not (empty? (child-nodes n))))
+(defn- text-of-child-node [node n] (second (nth (child-nodes node) n)))
+(defn parse-seq [f] (tree-seq branch? child-nodes (mktree (parse f))))
+
+(defmacro defnode
+  [nm tt]
+  `(defn ~nm [n#] (= ~tt (first n#))))
+
+(defnode package-node JavaParser/PACKAGE)
+(defnode import-node JavaParser/IMPORT)
+(defnode typedecl-node JavaParser/TYPEDECL)
+
+(defn package-decl [ast]
+  (when-let [pkgtokens (filter package-node ast)]
+    (text-of-child-node (first pkgtokens) 0)))
 
 (defn import-decls
   [ast]
   (for [node (filter import-node ast)]
-    (let [args (map #(.getText %) (ast-children node))]
+    (let [args (map second (child-nodes node))]
       (cons (first args) (map keyword (rest args))))))
 
 (defn type-decls
   [ast]
-  (let [package (package-decl ast)]
-    (map #(str package "." (.getText (first (.getChildren %)))) (filter typedecl-node ast))))
+  (map #(nth (first (child-nodes %)) 3) (filter typedecl-node ast)))

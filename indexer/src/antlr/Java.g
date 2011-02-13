@@ -311,6 +311,7 @@ compilationUnit
     :   ( (annotations )? packageDeclaration )?
         (importDeclaration)*
         (typeDeclaration)*
+    -> ^(packageDeclaration importDeclaration* typeDeclaration*)
     ;
 
 packageDeclaration 
