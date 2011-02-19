@@ -297,7 +297,9 @@ tokens {
   QNAME;
   STAR = '*';
   STATIC = 'static';
+  THROWS = 'throws';
   TYPEDECL;
+  TYPEREF;
 }
 
 @header        { package indexer.java; }
@@ -391,45 +393,30 @@ typeParameters
     ;
 
 typeParameter 
-    :   IDENTIFIER
-        ('extends' typeBound
-        )?
+    :   IDENTIFIER ('extends' typeBound)?
+        -> ^(TYPEREF IDENTIFIER typeBound?)
     ;
 
 
 typeBound 
-    :   type
-        ('&' type
-        )*
+    :   t+=type ('&' t+=type)*
+        -> ^(TYPEREF $t)
     ;
 
 
 enumDeclaration 
-    :   modifiers 
-        ('enum'
-        ) 
-        IDENTIFIER
-        ('implements' intfs=typeList
-        )?
+    :   modifiers ('enum')  IDENTIFIER ('implements' intfs=typeList)?
         enumBody
-        -> ^(TYPEDECL IDENTIFIER $intfs? enumBody)
+        -> ^(TYPEDECL IDENTIFIER $intfs?)
     ;
     
 
 enumBody 
-    :   '{'
-        (enumConstants
-        )? 
-        ','? 
-        (enumBodyDeclarations
-        )? 
-        '}'
+    :   '{' (enumConstants )? ','? (enumBodyDeclarations)? '}'
     ;
 
 enumConstants 
-    :   enumConstant
-        (',' enumConstant
-        )*
+    :   enumConstant (',' enumConstant)*
     ;
 
 /**
@@ -437,21 +424,13 @@ enumConstants
  * EnumeratorDeclaration = AnnotationsOpt [TypeArguments] IDENTIFIER [ Arguments ] [ "{" ClassBody "}" ]
  */
 enumConstant 
-    :   (annotations
-        )?
-        IDENTIFIER
-        (arguments
-        )?
-        (classBody
-        )?
+    :   (annotations)? IDENTIFIER (arguments)? (classBody)?
         /* TODO: $GScope::name = names.empty. enum constant body is actually
         an anonymous class, where constructor isn't allowed, have to add this check*/
     ;
 
 enumBodyDeclarations 
-    :   ';' 
-        (classBodyDeclaration
-        )*
+    :   ';' (classBodyDeclaration)*
     ;
 
 interfaceDeclaration 
@@ -461,39 +440,27 @@ interfaceDeclaration
     
 normalInterfaceDeclaration 
     :   modifiers 'interface' IDENTIFIER
-        (typeParameters
-        )?
-        ('extends' intfs=typeList
-        )?
+        (typeParameters)?
+        ('extends' intfs=typeList)?
         interfaceBody
         -> ^(TYPEDECL IDENTIFIER $intfs? interfaceBody)
     ;
 
 typeList 
-    :   type
-        (',' type
-        )*
+    :   type (',' type)*
     ;
 
 classBody 
-    :   '{' 
-        (classBodyDeclaration
-        )* 
-        '}'
+    :   '{' (classBodyDeclaration)* '}'
     ;
 
 interfaceBody 
-    :   '{' 
-        (interfaceBodyDeclaration
-        )* 
-        '}'
+    :   '{' (interfaceBodyDeclaration)* '}'
     ;
 
 classBodyDeclaration 
     :   ';'
-    |   ('static'
-        )? 
-        block
+    |   ('static')? block
     |   memberDecl
     ;
 
@@ -504,57 +471,20 @@ memberDecl
     |    interfaceDeclaration
     ;
 
-
 methodDeclaration 
     :
         /* For constructor, return type is null, name is 'init' */
-         modifiers
-        (typeParameters
-        )?
-        IDENTIFIER
-        formalParameters
-        ('throws' qualifiedNameList
-        )?
-        '{' 
-        (explicitConstructorInvocation
-        )?
-        (blockStatement
-        )*
-        '}'
-    |   modifiers
-        (typeParameters
-        )?
-        (type
-        |   'void'
-        )
-        IDENTIFIER
-        formalParameters
-        ('[' ']'
-        )*
-        ('throws' qualifiedNameList
-        )?            
-        (        
-            block
-        |   ';' 
-        )
+        modifiers (typeParameters)? IDENTIFIER formalParameters (THROWS qualifiedNameList )? '{' (explicitConstructorInvocation)? (blockStatement)* '}'
+    |   modifiers (typeParameters)? (type | 'void') IDENTIFIER formalParameters ('[' ']' )* (THROWS qualifiedNameList )? ( block | ';')
     ;
 
 
 fieldDeclaration 
-    :   modifiers
-        type
-        variableDeclarator
-        (',' variableDeclarator
-        )*
-        ';'
+    :   modifiers type variableDeclarator (',' variableDeclarator)* ';'
     ;
 
 variableDeclarator 
-    :   IDENTIFIER
-        ('[' ']'
-        )*
-        ('=' variableInitializer
-        )?
+    :   IDENTIFIER ('[' ']' )* ('=' variableInitializer )?
     ;
 
 /**
@@ -570,18 +500,8 @@ interfaceBodyDeclaration
     ;
 
 interfaceMethodDeclaration 
-    :   modifiers
-        (typeParameters
-        )?
-        (type
-        |'void'
-        )
-        IDENTIFIER
-        formalParameters
-        ('[' ']'
-        )*
-        ('throws' qualifiedNameList
-        )? ';'
+    :   modifiers (typeParameters)? (type | 'void') IDENTIFIER formalParameters ('[' ']')* ('throws' qualifiedNameList)? ';'
+        -> ^(TYPEREF qualifiedNameList? type formalParameters)
     ;
 
 /**
@@ -590,31 +510,19 @@ interfaceMethodDeclaration
  * But this gives better diagnostic message, or antlr won't predict this rule.
  */
 interfaceFieldDeclaration 
-    :   modifiers type variableDeclarator
-        (',' variableDeclarator
-        )*
-        ';'
+    :   modifiers type variableDeclarator (',' variableDeclarator )* ';'
     ;
 
 
-type 
-    :   classOrInterfaceType
-        ('[' ']'
-        )*
-    |   primitiveType
-        ('[' ']'
-        )*
+type
+    :   classOrInterfaceType ('[' ']' )*
+    |   primitiveType ('[' ']' )*
     ;
-
 
 classOrInterfaceType 
-    :   IDENTIFIER
-        (typeArguments
-        )?
-        ('.' IDENTIFIER
-            (typeArguments
-            )?
-        )*
+    :   IDENTIFIER (typeArguments)? ('.' IDENTIFIER (typeArguments)? )*
+        -> { new CommonTree(new CommonToken(TYPEREF, $IDENTIFIER.text)) }
+//        -> ^(TYPEREF IDENTIFIER+)
     ;
 
 primitiveType  
@@ -629,82 +537,52 @@ primitiveType
     ;
 
 typeArguments 
-    :   '<' typeArgument
-        (',' typeArgument
-        )* 
-        '>'
+    :   '<' typeArgument (',' typeArgument )* '>'
     ;
 
 typeArgument 
     :   type
-    |   '?'
-        (
-            ('extends'
-            |'super'
-            )
-            type
-        )?
+    |   '?' ( ('extends' | 'super' ) type )?
     ;
 
 qualifiedNameList 
-    :   qualifiedName
-        (',' qualifiedName
-        )*
+    :   qnames+=qualifiedName (',' qnames+=qualifiedName )*
+        -> ^(TYPEREF $qnames)
     ;
 
 formalParameters 
-    :   '('
-        (formalParameterDecls
-        )? 
-        ')'
+    :   '(' (formalParameterDecls)? ')'
     ;
 
 formalParameterDecls 
     :   ellipsisParameterDecl
-    |   normalParameterDecl
-        (',' normalParameterDecl
-        )*
-    |   (normalParameterDecl
-        ','
-        )+ 
+    |   normalParameterDecl (',' normalParameterDecl)*
+    |   (normalParameterDecl ',' )+ 
         ellipsisParameterDecl
     ;
 
 normalParameterDecl 
-    :   variableModifiers type IDENTIFIER
-        ('[' ']'
-        )*
+    :   variableModifiers type IDENTIFIER ('[' ']')*
     ;
 
 ellipsisParameterDecl 
-    :   variableModifiers
-        type  '...'
-        IDENTIFIER
+    :   variableModifiers type  '...' IDENTIFIER
     ;
 
 
 explicitConstructorInvocation 
     :   (nonWildcardTypeArguments
         )?     //NOTE: the position of Identifier 'super' is set to the type args position here
-        ('this'
-        |'super'
-        )
+        ('this'|'super')
         arguments ';'
-
-    |   primary
-        '.'
-        (nonWildcardTypeArguments
-        )?
-        'super'
-        arguments ';'
+    |   primary '.' (nonWildcardTypeArguments)? 'super' arguments ';'
     ;
 
 qualifiedName
     :   IDENTIFIER ('.' IDENTIFIER )* -> {new CommonTree(new CommonToken(QNAME, $qualifiedName.text))};
 
 annotations 
-    :   (annotation
-        )+
+    :   (annotation)+
     ;
 
 /**
@@ -722,9 +600,7 @@ annotation
     ;
 
 elementValuePairs 
-    :   elementValuePair
-        (',' elementValuePair
-        )*
+    :   elementValuePair (',' elementValuePair)*
     ;
 
 elementValuePair 
@@ -744,7 +620,6 @@ elementValueArrayInitializer
             )*
         )? (',')? '}'
     ;
-
 
 /**
  * Annotation declaration.
@@ -786,35 +661,10 @@ annotationMethodDeclaration
 
 block 
     :   '{'
-        (blockStatement
-        )*
+        (blockStatement)*
         '}'
     ;
 
-/*
-staticBlock returns [JCBlock tree]
-        @init {
-            ListBuffer<JCStatement> stats = new ListBuffer<JCStatement>();
-            int pos = ((AntlrJavacToken) $start).getStartIndex();
-        }
-        @after {
-            $tree = T.at(pos).Block(Flags.STATIC, stats.toList());
-            pu.storeEnd($tree, $stop);
-            // construct a dummy static modifiers for end position
-            pu.storeEnd(T.at(pos).Modifiers(Flags.STATIC,  com.sun.tools.javac.util.List.<JCAnnotation>nil()),$st);
-        }
-    :   st_1='static' '{' 
-        (blockStatement
-            {
-                if ($blockStatement.tree == null) {
-                    stats.appendList($blockStatement.list);
-                } else {
-                    stats.append($blockStatement.tree);
-                }
-            }
-        )* '}'
-    ;
-*/
 blockStatement 
     :   localVariableDeclarationStatement
     |   classOrInterfaceDeclaration
@@ -998,17 +848,14 @@ andExpression
 equalityExpression 
     :   instanceOfExpression
         (   
-            (   '=='
-            |   '!='
-            )
+            ( '==' | '!=' )
             instanceOfExpression
         )*
     ;
 
 instanceOfExpression 
     :   relationalExpression
-        ('instanceof' type
-        )?
+        ('instanceof' type )? -> ^(TYPEREF type?)
     ;
 
 relationalExpression 
@@ -1041,9 +888,7 @@ shiftOp
 additiveExpression 
     :   multiplicativeExpression
         (   
-            (   '+'
-            |   '-'
-            )
+            ( '+' | '-' )
             multiplicativeExpression
          )*
     ;
@@ -1052,10 +897,7 @@ multiplicativeExpression
     :
         unaryExpression
         (   
-            (   '*'
-            |   '/'
-            |   '%'
-            )
+            ( '*' | '/' | '%')
             unaryExpression
         )*
     ;
@@ -1076,12 +918,7 @@ unaryExpressionNotPlusMinus
     :   '~' unaryExpression
     |   '!' unaryExpression
     |   castExpression
-    |   primary
-        (selector
-        )*
-        (   '++'
-        |   '--'
-        )?
+    |   primary (selector)* ('++' | '--')?
     ;
 
 castExpression 
@@ -1595,10 +1432,6 @@ THIS
 
 THROW
     :   'throw'
-    ;
-
-THROWS
-    :   'throws'
     ;
 
 TRANSIENT
