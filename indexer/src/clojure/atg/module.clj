@@ -37,9 +37,12 @@
     (merge (name-to-keyword (java-component-properties path))
            (struct component sect compn body path (component-names-in body)))))
 
-(defn component-files
-  ([m sub]
-     (filter (fn [f] (.endsWith (.getPath f) ".properties")) (file-seq (file-str (:base m) "/" sub)))))
+(defn suffix-p [suffix f] (.endsWith (.getPath f) suffix))
+(def properties? (partial suffix-p ".properties"))
+(def java? (partial suffix-p ".java"))
+
+(defn component-files [m sub] (filter properties? (file-seq (file-str (:base m) "/" sub))))
+(defn source-files [m] (filter java? (file-seq (:base m))))
 
 (defn- canonicalize
   [m prefix compf]

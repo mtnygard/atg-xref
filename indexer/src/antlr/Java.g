@@ -522,7 +522,6 @@ type
 classOrInterfaceType 
     :   IDENTIFIER (typeArguments)? ('.' IDENTIFIER (typeArguments)? )*
         -> { new CommonTree(new CommonToken(TYPEREF, $IDENTIFIER.text)) }
-//        -> ^(TYPEREF IDENTIFIER+)
     ;
 
 primitiveType  

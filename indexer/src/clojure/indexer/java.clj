@@ -59,6 +59,7 @@
 (defnode package-node JavaParser/PACKAGE)
 (defnode import-node JavaParser/IMPORT)
 (defnode typedecl-node JavaParser/TYPEDECL)
+(defnode typeref-node JavaParser/TYPEREF)
 
 (defn package-decl [ast]
   (when-let [pkgtokens (filter package-node ast)]
@@ -73,3 +74,15 @@
 (defn type-decls
   [ast]
   (map #(nth (first (child-nodes %)) 3) (filter typedecl-node ast)))
+
+(defn type-refs
+  [ast]
+  (map #(nth (first (child-nodes %)) 1) (filter typeref-node ast)))
+
+(defn summary-info
+  [f]
+  (let [ast (parse-seq f)]
+    {:package (package-decl ast)
+     :references (conj (import-decls ast) (type-refs ast))
+
+     }))
