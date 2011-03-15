@@ -6,7 +6,8 @@
         [ring.util.response]
         [ring.middleware file file-info stacktrace reload])
   (:require [compojure.route :as route]
-            view))
+            view)
+  (:gen-class))
 
 (extend-protocol Renderable
   fleet.util.CljString
