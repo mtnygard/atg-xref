@@ -3,6 +3,7 @@ package foo.bar;
 import java.util.concurrent.Latch;
 import doesnt.exist.*;
 import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.is;
 import foo.bar.core.Litmus;
 
 public class AcidTest extends foo.bar.api.BaseTest implements Litmus {
