@@ -55,8 +55,7 @@
 (defn type-decls [tree]
   (let [packagename (package-decl tree)]
     (map #(str packagename "." (.getIdentifier %)) (iterator-seq (.getTypeDeclarations tree)))
-    )
-  )
+    ))
 
 (defn type-refs [tree]
   )
