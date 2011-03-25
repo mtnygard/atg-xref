@@ -20,4 +20,10 @@ class Pipette {
     int dropsInMilliliters;
 
     public int titrate() throws UnsupportedSolutionException;
+
+    class Mark {
+        enum Unit { MICRO, MILLI, CENTI, DECI }
+        
+        private Unit unit;
+    }
 }

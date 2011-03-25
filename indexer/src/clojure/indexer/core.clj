@@ -76,10 +76,6 @@
    :classpath (nilsafe-split (:ATG-Class-Path manifest) #" ")
    :configpath (nilsafe-split (:ATG-Config-Path manifest) #" ")})
 
-
-
-
-
 (defn module-documents [m] (list (document-for-module m)))
 
 (defn index-documents

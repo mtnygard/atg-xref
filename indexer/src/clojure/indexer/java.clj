@@ -3,8 +3,9 @@
   (:require [clojure.contrib.str-utils2 :as str])
 
   (:import [com.habelitz.jsobjectizer.unmarshaller JSourceUnmarshaller]
-           [com.habelitz.jsobjectizer.jsom.util TraverseAction TraverseActionAdapter]
-           [com.habelitz.jsobjectizer.jsom.api JavaSource ClassDeclaration]))
+           [com.habelitz.jsobjectizer.jsom.util JSOMIterator]
+           [com.habelitz.jsobjectizer.jsom.api JavaSource ClassDeclaration QualifiedIdentifier ClassTopLevelScope EnumTopLevelScope]
+           [com.habelitz.jsobjectizer.jsom JSOM]))
 
 (def testfile (file "test/resources/AcidTest.java"))
 
@@ -14,48 +15,35 @@
 
 (def teststring2 "import java.util.List; import static org.hamcrest.Matchers.*; public class Hello { public static void main(String[] args) { System.out.println(\"Hello, world!\"); } }")
 
-
 (defn parse [f] (.unmarshal (JSourceUnmarshaller.) f nil))
 
-(defn package-decl [tree] (.toString (.getPackageDeclaration tree)))
+(declare jsom->map)
 
-(defn- drop-last-segment [qualifiedname]
-  (str/join "." (reverse (drop 1 (reverse (str/split qualifiedname #"\."))))))
+(defn jsom->bean  "Create a basic map of properties from a JSOM API instance."
+  [jsom & exclusions]
+  (let [basic-bean (bean jsom)
+        bad-keys (into [] exclusions)
+        filtered-bean (apply dissoc basic-bean bad-keys)]
+    (reduce (fn [m [k v]]
+              (assoc m k (if (nil? v) nil (jsom->map v))))
+            {} filtered-bean)))
 
-(defn import-class [decl]
-  (let [static (.isStaticImport decl)
-        multi (.isMultiImport decl)
-        qname (.toString (.getImportPath decl))]
-    (cond
-     (and static multi) qname
-     static (drop-last-segment qname)
-     :else qname)))
+(defprotocol Mappable
+  (jsom->map [jsom] "Perform type-specific property conversions."))
 
-(defn import-decls [tree]
-  (set (map import-class (iterator-seq (.getImportDeclarations tree)))))
+(extend-protocol Mappable
+  ClassTopLevelScope  (jsom->map [jsom] (jsom->bean jsom :except :ownerClassDeclaration))
+  EnumTopLevelScope   (jsom->map [jsom] (jsom->bean jsom :except :owner))
+  QualifiedIdentifier (jsom->map [jsom] (.toString jsom))
+  JSOMIterator  (jsom->map [jsom] (map jsom->map (iterator-seq jsom)))
+  JSOM   (jsom->map [jsom] (jsom->bean jsom))
+  Object  (jsom->map [obj] obj))
 
-(defprotocol TypeContainer
-  "Language elements that can contain type declarations"
-  (declared-types [container qualifier] "Get a lazy sequence of the types declared by this container"))
+;;; file -> jsom -> maps
 
-(extend-protocol TypeContainer
-  ClassDeclaration
-  (declared-types [c q]
-                  (if-let [inner-decls (.getInnerTypeDeclarations (.getTopLevelScope c))]
-                    (for [inner (iterator-seq inner-decls)]
-                      (str q "$" (.getIdentifier inner)))))
+;;; analyze the compilation unit by
+;;;  - find the package decl
+;;;  - find the imports
+;;;  - find the type decls
+;;;  - return seq of the declared types as (name package source line)
 
-  JavaSource
-  (declared-types [c q]
-                  (flatten (for [top (iterator-seq (.getTypeDeclarations c))]
-                             (let [qname (str q "." (.getIdentifier top))]
-                               (cons qname (declared-types top qname)) )))))
-   
-
-(defn type-decls [tree]
-  (let [packagename (package-decl tree)]
-    (map #(str packagename "." (.getIdentifier %)) (iterator-seq (.getTypeDeclarations tree)))
-    ))
-
-(defn type-refs [tree]
-  )
