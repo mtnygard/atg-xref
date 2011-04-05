@@ -45,9 +45,9 @@
      :source body
      }))
 
-(defn sources-seq [m] (for [s (source-files m)] (summary-info s)))
+#_(defn sources-seq [m] (for [s (source-files m)] (summary-info s)))
 
-(defn source-documents [m] (map #(document-for-source m %) (sources-seq m)))
+#_(defn source-documents [m] (map #(document-for-source m %) (sources-seq m)))
 
 (defn document-for-component
   [mod sect compf]
@@ -90,7 +90,7 @@
   (doseq [m ms]
     (index-documents #(module-documents m))
     (index-documents #(component-documents m))
-    #_(index-documents #(source-documents m)))
+    )
   (.commit *solr-server*))
 
 (defn -main [root]
