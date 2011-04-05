@@ -3,4 +3,5 @@ pom.xml
 *jar
 lib
 classes
-src/gen-src
+docs/
+

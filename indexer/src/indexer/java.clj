@@ -1,5 +1,6 @@
 (ns indexer.java
-  (:use [clojure.java.io :only (file reader)])
+  (:use [clojure.java.io :only (file reader)]
+        indexer.symtab)
   (:require [clojure.contrib.str-utils2 :as str])
 
   (:import [com.habelitz.jsobjectizer.unmarshaller JSourceUnmarshaller]
@@ -46,4 +47,21 @@
 ;;;  - find the imports
 ;;;  - find the type decls
 ;;;  - return seq of the declared types as (name package source line)
+(defn process-types [ts]
+  (doseq [t ts]
+    (declare-class (:identifier t))
+    (process-types (get-in t [:topLevelScope :innerTypeDeclarations]))))
 
+(defn process-compilation-unit [ast]
+  (and (:packageDeclaration ast) (declare-package (:packageDeclaration ast)))
+  (process-types (:typeDeclarations ast)))
+
+(defn jsom-seq [m] (tree-seq map? #(flatten (filter coll? (vals %))) m))
+
+(def class-or-enum #{com.habelitz.jsobjectizer.jsom.JSOM$JSOMType/CLASS_DECLARATION com.habelitz.jsobjectizer.jsom.JSOM$JSOMType/ENUM_DECLARATION})
+
+#_(filter #(some #{(:JSOMType %)} class-or-enum) ast-seq)
+
+
+
+#_(defn classes-from [f] (extract-summary f (jsom->map (parse f))))

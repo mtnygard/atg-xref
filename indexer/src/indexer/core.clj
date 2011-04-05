@@ -43,7 +43,7 @@
      :package (:package src)
      :classname cls
      :source body
-     :references (:typerefs src)}))
+     }))
 
 (defn sources-seq [m] (for [s (source-files m)] (summary-info s)))
 

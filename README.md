@@ -42,11 +42,9 @@ laptop or workstation.
 
 * General
 ** Make search box work
-** Pagination
 ** Create high-level "what uses?" page.
 
 * Components
-** Filter out URLs and filenames that look like component names.
 
 * Java classes
 ** Index classes

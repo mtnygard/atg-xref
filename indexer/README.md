@@ -6,8 +6,7 @@ At present, this only knows how to index ATG modules.
 
 ## Usage
 
-The whole program is packaged as an uberjar, so you can run it
-straight from the command line:
+The whole program is packaged as an uberjar, so you can run it straight from the command line:
 
     java -jar atg-xref-indexer-1.0.0-SNAPSHOT-standalone.jar <path_to_codebase>
 
@@ -15,23 +14,13 @@ This indexer knows some specifics about a certain large retailer's codebase. The
 
 ## Building
 
-This uses [Leiningen][1]. You should install version 1.3.1 or higher. 
+This uses [Cake][1].
 
-First, update the Java grammar:
-
-    lein antlr
-
-Compile the classes created by ANTLR:
-
-    lein javac
-
-Then, create the uberjar:
-
-    lein uberjar
+    cake uberjar
 
 ## License
 
 Copyright (C) 2011 N6 Consulting LLC, All Rights Reserved
 
 
-[1]: https://github.com/technomancy/leiningen  "github.com/technomancy/leiningen"
+[1]: https://github.com/ninjudd/cake  "github.com/ninjudd/cake"
