@@ -19,9 +19,18 @@ This uses [Cake][1].
     cake deps
     cake bin
 
+## Generate doco
+
+Documentation generated automatically using [Marginalia][2], executed
+as a [Cake][1] plugin.
+
+    cake marg
+
+
 ## License
 
 Copyright (C) 2011 N6 Consulting LLC, All Rights Reserved
 
 
 [1]: https://github.com/ninjudd/cake  "github.com/ninjudd/cake"
+[2]: https://github.com/fogus/marginalia "github.com/fogus/marginalia"
