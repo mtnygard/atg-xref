@@ -6,6 +6,8 @@
                  [fleet "0.9.4"]
                  [compojure "0.5.3"]
                  [ring "0.3.5"]]
-  :dev-dependencies [[swank-clojure "1.2.1"]]
+  :dev-dependencies [[swank-clojure "1.2.1"]
+                     [marginalia "0.5.0"]]
   :main webui.core
+  :tasks [marginalia.tasks]
   )

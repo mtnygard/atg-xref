@@ -7,7 +7,7 @@
   [m]
   (let [mname (:name m)
         link (str "/modules/" mname)]
-    (str "<a href=\"" link "\">" mname "</a>")))
+    [(str "<a href=\"" link "\">" mname "</a>")]))
 
 (defn module-summaries
   [f] (set (map link-to (f))))
@@ -20,11 +20,11 @@
 
 (defn required-by
   [{reqd :required}]
-  (map #(link-to {:name %}) (if (coll? reqd) reqd (list reqd))))
+  (if (coll? reqd) reqd (list reqd)))
 
 (defn requiring
   [mod]
-  (module-summaries #(solr-query (str "required:\"" (:name mod) "\""))))
+  (set (map :name (solr-query (str "required:\"" (:name mod) "\"")))))
 
 (defn modules-named [pat] (solr-query (str "name:" pat)))
 

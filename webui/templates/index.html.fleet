@@ -2,10 +2,6 @@
 
 <(view/components)>
 
-<div id="classplaceholder">
-  <p>Loading...</p>
-</div>
-
 <div id="jspplaceholder">
   <p>Loading...</p>
 </div>

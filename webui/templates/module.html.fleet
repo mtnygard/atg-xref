@@ -11,7 +11,7 @@
       </thead>
       <tbody>
         <(map (fn [r] ">
-          <tr><td><(str r)></td></tr>
+          <tr><td><a href="/modules/<(str r)>"><(str r)></a></td></tr>
         <") (:required-by data))>
       </tbody>
       <tfoot>
@@ -20,9 +20,7 @@
         </tr>
       </tfoot>
     </table>
-  </div>
-  
-  <div id="modules2">
+
     <h2>Modules that require <(get-in data [:module :name])></h2>
     <table id="modules-requiring" class="display" cellpadding="0" cellborder="0" width="90%">
       <thead>
@@ -32,7 +30,7 @@
       </thead>
       <tbody>
         <(map (fn [r] ">
-          <tr><td><(str r)></td></tr>
+          <tr><td><a href="/modules/<(str r)>"><(str r)></a></td></tr>
         <") (:requiring data))>
       </tbody>
       <tfoot>

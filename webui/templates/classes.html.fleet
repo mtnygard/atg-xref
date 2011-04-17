@@ -1,5 +1,38 @@
 <div id="classes">
   <h2><a href="/classes">Classes</a></h2>
 
-  <(list-of-links data)>
+  <div>
+    <table id="classes-table" class="display" cellpadding="0" cellborder="0" width="90%">
+      <thead>
+        <tr>
+	  <th width="100%">Class Name</th>
+        </tr>
+      </thead>
+      <tbody>
+
+      </tbody>
+      <tfoot>
+        <tr>
+	  <th>Class Name</th>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
 </div>
+
+<script>
+  $('#classes-table').dataTable( {
+    "bProcessing": true,
+    "iDisplayLength": 25,
+    "sPaginationType": "full_numbers",
+    "sAjaxSource": "/v1/classes",
+    "aoColumnDefs": [
+      {
+        "fnRender": function (oObj) {
+          return '<a href="/classes/' + oObj.aData[0] + '">' + oObj.aData[0] + '</a>';
+        },
+        "aTargets": [0]
+      }
+    ]
+  });
+</script>

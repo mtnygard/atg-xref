@@ -6,7 +6,6 @@
                  [org.antlr/antlr "3.2"]]
   :dev-dependencies [[swank-clojure "1.3.0-SNAPSHOT"]
                      [marginalia "0.5.0"]]
-  :source-path "src/clojure"
   :main indexer.core
   :tasks [marginalia.tasks]
 )
