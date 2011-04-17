@@ -1,5 +1,6 @@
 (ns indexer.java
   (:use [clojure.java.io :only (file reader)]
+        [clojure.string :only (split)]
         indexer.symtab)
   (:require [clojure.contrib.str-utils2 :as str])
 
@@ -47,14 +48,64 @@
 ;;;  - find the imports
 ;;;  - find the type decls
 ;;;  - return seq of the declared types as (name package source line)
-(defn process-types [ts]
-  (doseq [t ts]
-    (declare-class (:identifier t))
-    (process-types (get-in t [:topLevelScope :innerTypeDeclarations]))))
+
+(defn- last-part-of
+  "Split a dotted classname, return the last part"
+  [path]
+  (last (split path #"\.")))
+
+(defn declare-package
+  "Create a frame in the symbol table for the package"
+  [env pkg]
+  (extend-environment env (make-frame '(%package %current) [pkg pkg])))
+
+(defn declare-precise-import
+  "Create a frame representing a precise (i.e., class) import. Not for static imports."
+  [env qname]
+  (let [pname (last-part-of qname)]
+    (add-binding-to-current-scope env pname qname)))
+
+;; (defn process-types [ts]
+;;   (doseq [t ts]
+;;     (declare-class (:identifier t))
+;;     (process-types (get-in t [:topLevelScope :innerTypeDeclarations]))))
+
+(defn process-imports
+  "Examine the collection of import statements. Resolve precise imports, leaving wildcards for later"
+  [env imports]
+  (let [proc-imp (fn [env import]
+                   (let [qname (:importPath import)
+                         multi (:multiImport import)
+                         static (:staticImport import)
+                         pname (last-part-of qname)]
+                     (cond
+                      (and multi static) (add-binding-to-current-scope env qname :static-wildcard)
+                      static (add-binding-to-current-scope env qname :static)
+                      multi (add-binding-to-current-scope env qname :wildcard)
+                      :else (add-binding-to-current-scope env pname qname)))
+                   )]
+    (reduce proc-imp env imports)))
+
+
+
+
+(defn process-type-decls
+  "Walk the list of type declarations, add them below the current scope."
+  [env types]
+  (defn process-type-decl
+    "Record a type declaration from the AST into the symbol table. Returns a new frame."
+    [env type]
+    (println (:identifier type))
+    (add-binding-to-current-scope env (:identifier type) (:identifier type))
+    (process-type-decls (extend-environment env (make-frame '() '())) (:innerTypeDeclarations type)))
+  (reduce process-type-decl env types))
 
 (defn process-compilation-unit [ast]
-  (and (:packageDeclaration ast) (declare-package (:packageDeclaration ast)))
-  (process-types (:typeDeclarations ast)))
+  (-> empty-environment
+      (declare-package (:packageDeclaration ast))
+      (process-imports (:importDeclarations ast))
+      (process-type-decls (:typeDeclarations ast))
+      ))
 
 (defn jsom-seq [m] (tree-seq map? #(flatten (filter coll? (vals %))) m))
 

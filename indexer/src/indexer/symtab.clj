@@ -1,67 +1,59 @@
 (ns indexer.symtab
   "Symbol table for Java sources"
-  (:require [clojure.zip :as zip]))
+  (:use (clojure.contrib condition)))
 
-(defn topmost
-  "Like clojure.zip/root, but returns the loc rather than the node."
-  [loc]
-  (if (= :end (loc 1))
-    loc
-    (let [p (zip/up loc)]
-      (if p
-        (recur p)
-        loc))))
+(def empty-environment '())
 
-(defn find-child
-  [loc n]
-  (loop [cld (zip/down loc)]
-    (if (nil? cld)
-      nil
-      (if (= (cld 0) n)
-        cld
-        (recur (zip/right cld))))))
+(defn first-frame
+  "Get the innermost enclosing scope"
+  [env] (first env))
 
-(defn mk-empty-symtab [] (-> (zip/vector-zip '[["."]])))
+(defn enclosing-environment
+  "Get the environment above the current one"
+  [env]
+  (rest env))
 
-(def *global-symtab* (ref (mk-empty-symtab)))
+(defn make-frame
+  "Define a new frame"
+  [vars types]
+  (zipmap vars types))
 
-(defn reset-symtab [] (dosync (ref-set *global-symtab* (mk-empty-symtab))))
+(defn frame-variables
+  "Get the list of variables defined in this scope frame"
+  [frame]
+  (keys frame))
 
-(defmacro edit-tree
-  "Define a new tree-editing function."
-  [body]
-  `(dosync (alter *global-symtab* (~@body))))
+(defn frame-types
+  "Get the list of types for the variables defined in this scope frame"
+  [frame]
+  (second frame))
 
-(defn append-and-navigate [loc child]
-  (->
-   (zip/append-child loc [child])
-   zip/down
-   zip/rightmost))
+(defn frame-variable-type
+  [frame var]
+  "Get the type of a variable in a frame"
+  (frame var))
 
-(defn declare-package
-  "Begin a new package. Moves to root of symtab, leaves loc pointing at the package node itself"
-  [name]
-  (prn "Declaring package " name)
-  (dosync (alter *global-symtab* 
-                 (fn [loc]
-                   (let [top (topmost loc)
-                         existing (find-child top name)]
-                     (if existing
-                       existing
-                       (append-and-navigate top name)))))))
+(defn extend-environment
+  "Add a new scope frame in the environment"
+  [env frame]
+  (cons frame env))
 
-(defn declare-class
-  [name & opts]
-  (prn "Declaring class " name)
-  (let [node (reduce (fn [m [k v]] (assoc m k v)) {:name name} (partition 2 opts))]
-    (dosync (alter *global-symtab* append-and-navigate node))))
+(defn add-binding-to-frame
+  "Return a new frame with the additional variable binding"
+  [frame var type]
+  (assoc frame var type))
 
-(defn exit-scope []
-  (dosync (alter *global-symtab* zip/up)))
+(defn add-binding-to-current-scope
+  "Return a new environment with the additional binding in the current scope"
+  [env var type]
+  (extend-environment (enclosing-environment env)
+                      (add-binding-to-frame (first-frame env) var type)))
 
-(defmacro with-class
-  [name & body]
-  `(do
-     (declare-class ~name)
-     ~@body
-     (exit-scope)))
+(defn lookup-variable-type
+  "Look up the type of a variable, anywhere in the list of enclosing environments"
+  [env var]
+  (if (= env empty-environment)
+    (raise :message "Unbound variable")
+    (if-let [result (frame-variable-type (first-frame env) var)]
+      result
+      (recur (enclosing-environment env) var))))
