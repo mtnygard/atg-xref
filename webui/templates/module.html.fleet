@@ -11,7 +11,7 @@
       </thead>
       <tbody>
         <(map (fn [r] ">
-          <tr><td><a href="/modules/<(str r)>"><(str r)></a></td></tr>
+          <tr><td><a href="/module/<(str r)>"><(str r)></a></td></tr>
         <") (:required-by data))>
       </tbody>
       <tfoot>
@@ -30,7 +30,7 @@
       </thead>
       <tbody>
         <(map (fn [r] ">
-          <tr><td><a href="/modules/<(str r)>"><(str r)></a></td></tr>
+          <tr><td><a href="/module/<(str r)>"><(str r)></a></td></tr>
         <") (:requiring data))>
       </tbody>
       <tfoot>
@@ -81,6 +81,14 @@
     "bProcessing": true,
     "iDisplayLength": 25,
     "sPaginationType": "full_numbers",
-    "sAjaxSource": "<(str "/v1/components/module/" (get-in data [:module :name]))>"
+    "sAjaxSource": "<(str "/v1/components/module/" (get-in data [:module :name]))>",
+    "aoColumnDefs": [
+      {
+        "fnRender": function (oObj) {
+          return '<a href="/component/' + oObj.aData[0] + '">' + oObj.aData[0] + '</a>';
+        },
+        "aTargets": [0]
+      }
+    ]
   });
 </script>

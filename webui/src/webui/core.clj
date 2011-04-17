@@ -24,7 +24,7 @@
 
 (defroutes main-routes
   (GET "/" [] (view/layout (index-page)))
-  (GET ["/modules/:qname" :qname #".*"] [qname] (layout-or-404 (module-page qname)))
+  (GET ["/module/:qname" :qname #".*"] [qname] (layout-or-404 (module-page qname)))
   (GET "/modules" [] (layout-or-404 (modules-page)))
   (GET "/components" [] (layout-or-404 (components-page)))
   (GET "/component/*" {{compn "*"} :route-params} (layout-or-404 (component-page compn)))

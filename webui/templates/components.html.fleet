@@ -25,7 +25,16 @@
     "bProcessing": true,
     "iDisplayLength": 25,
     "sPaginationType": "full_numbers",
-    "sAjaxSource": "/v1/components"
+    "sAjaxSource": "/v1/components",
+    "aoColumnDefs": [
+      {
+        "fnRender": function (oObj) {
+          return '<a href="/component/' + oObj.aData[0] + '">' + oObj.aData[0] + '</a>';
+        },
+        "aTargets": [0]
+      }
+    ]
+          
   });
 </script>
 

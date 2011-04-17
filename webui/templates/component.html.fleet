@@ -3,7 +3,11 @@
 
   <div>
     <h2>Depends On</h2>
-    <(list-of-links (:uses data))>
+    <ul class="paginated summarylist">
+      <(map (fn [l] ">
+        <li><a href="/component/<(str l)>"><(str l)></a></li>
+      <") (:uses data))>
+    </ul>
   </div>
 
   <div>

@@ -19,7 +19,7 @@
 
 (defn modules-crumbs [] (conj (home-crumbs) (crumb "/modules" "Modules")))
 
-(defn module-crumbs [mod] (conj (modules-crumbs) (crumb (str "/modules/" mod) mod)))
+(defn module-crumbs [mod] (conj (modules-crumbs) (crumb (str "/module/" mod) mod)))
 
 (defn modules-api
   [& pat] (json-str {:aaData (partition 1 (set (map :name (solr-query "name:*"))))}))

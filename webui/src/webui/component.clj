@@ -4,44 +4,42 @@
         clojure.contrib.json)
   (:require view))
 
-(defn component-link
-  [m]
-  (let [cname (if (string? m) m (:component m))]
-    {:link (str "/component/" cname) :name cname}))
+(defn components-crumbs
+  "Get a breadcrumb trail for the components page itself."
+  []
+  (conj (home-crumbs) (crumb "/components" "Components")))
 
-(defn components-named [pat] (solr-query (str "component:" pat)))
-
-(defn components-crumbs [] (conj (home-crumbs) (crumb "/components" "Components")))
-
-(defn component-crumbs [comp] (conj (components-crumbs) (crumb (str "/component/" comp) comp)))
-
-(defn- link-to
-  [m]
-  (let [cname (:component m)
-        link (str "/component/" cname)]
-    [(str "<a href=\"" link "\">" cname "</a>")]))
-
-(defn component-summaries
-  [f] (set (map link-to (f))))
+(defn component-crumbs
+  "Get a breadcrumb trail for a single component's own page."
+  [comp]
+  (conj (components-crumbs) (crumb (str "/component/" comp) comp)))
 
 (defn components-api
-  [& pat] (json-str {:aaData (component-summaries #(components-named (or pat "*")))}))
+  "Return all components known to Solr, as a single JSON object. Data is an array, under the key 'aaData'."
+  []
+  (json-str {:aaData
+             (partition 1 (set (map :component (solr-query "component:*"))))}))
 
 (defn components-in-module
-  [pat] (json-str {:aaData (component-summaries #(solr-query (str "component:* +module:" pat)))}))
+  "Return the components within the named module. Data is an array, under the key 'aaData'."
+  [pat]
+  (json-str {:aaData
+             (partition 1 (set (map :component (solr-query (str "component:* +module:" pat)))))}))
 
 (defn component-page
+  "View function to render a page for a single component. Returns a map suitable for passing to layout-or-404."
   [comp]
-  (if-let [defs (components-named comp)]
+  (if-let [defs (solr-query (str "component:" comp))]
     {:breadcrumbs (component-crumbs comp)
      :body (let [references (set (flatten (map :references defs)))]
              (view/component {:name comp
                               :component-defs defs
-                              :uses (map component-link references)}))}
+                              :uses references}))}
     nil))
 
 (defn components-page
+  "View function to render the components page. Returns a map suitable for passing to layout-or-404."
   []
   {:breadcrumbs (components-crumbs)
-   :body (view/components (map component-link (components-named "*")))})
+   :body (view/components)})
 
