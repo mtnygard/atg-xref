@@ -3,20 +3,9 @@
         clojure.contrib.json
         [clojure.java.io :only (file)]))
 
-(defn- link-to
-  [m]
-  (let [mname (:name m)
-        link (str "/modules/" mname)]
-    [(str "<a href=\"" link "\">" mname "</a>")]))
-
-(defn module-summaries
-  [f] (set (map link-to (f))))
-
 (defn module-components
   [qname]
   (map component-link (solr-query (str "+module:" qname " +component:*"))))
-
-(defn module-link [m] {:link (str "/modules/" (:name m)) :name (:name m)})
 
 (defn required-by
   [{reqd :required}]
@@ -33,7 +22,7 @@
 (defn module-crumbs [mod] (conj (modules-crumbs) (crumb (str "/modules/" mod) mod)))
 
 (defn modules-api
-  [& pat] (json-str {:aaData (module-summaries #(modules-named (or pat "*")))}))
+  [& pat] (json-str {:aaData (partition 1 (set (map :name (solr-query "name:*"))))}))
 
 (defn module-page [qname]
   (let [mod (first (modules-named qname))]
