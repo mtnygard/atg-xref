@@ -26,15 +26,21 @@
   (json-str {:aaData
              (partition 1 (set (map :component (solr-query (str "component:* +module:" pat)))))}))
 
+(defn component-outrefs
+  [f defs]
+  (set (flatten (filter (comp not nil?) (map f defs)))))
+
 (defn component-page
   "View function to render a page for a single component. Returns a map suitable for passing to layout-or-404."
   [comp]
   (if-let [defs (solr-query (str "component:" comp))]
     {:breadcrumbs (component-crumbs comp)
-     :body (let [references (set (flatten (map :references defs)))]
+     :body (let [references (component-outrefs :references defs)
+                 classes (component-outrefs :instantiates defs)]
              (view/component {:name comp
                               :component-defs defs
-                              :uses references}))}
+                              :uses references
+                              :classes classes}))}
     nil))
 
 (defn components-page

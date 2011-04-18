@@ -2,22 +2,12 @@
   <h1><(:component data)></h1>
 
   <div>
-    <h2>Depends On</h2>
-    <ul class="paginated summarylist">
-      <(map (fn [l] ">
-        <li><a href="/component/<(str l)>"><(str l)></a></li>
-      <") (:uses data))>
-    </ul>
-  </div>
-
-  <div>
     <h2>Definitions</h2>
     
     <(map (fn [d] ">
       <div class="definition-in-module">
         <h3><(module-link (:module d))></h3>
 
-        <(class-link (:instantiates d))>
         <(if-not (nil? (:scope d)) ">
           <p>Scope: <(:scope d)></p>
         <")>
@@ -28,6 +18,39 @@
         </div>
       </div>
     <") (:component-defs data))>
-    </div>
   </div>
 </div>
+
+<script type="text/javascript">
+SyntaxHighlighter.autoloader(
+  'properties /js/shBrushProperties.js'
+);
+
+SyntaxHighlighter.defaults['auto-links'] = true;
+ 
+SyntaxHighlighter.all();
+
+var references = [
+  <(map (fn [cl] ">
+    { "pat": new RegExp("<(str cl)>", "gm"), "text": "<(str cl)>", "link": "<(str "/classes/" cl)>" },
+  <") (:classes data))>
+
+  <(map (fn [c] ">
+    { "pat": new RegExp("<(str c)>", "gm"), "text": "<(str c)>", "link": "<(str "/component/" c)>" },
+  <") (seq (:uses data)))>
+];
+
+$(window).load(function() {
+  $(".source").each(function() {
+    for(var i = 0; i < references.length; i++) {
+      var p = references[i].pat;
+      var t = references[i].text;
+      var l = references[i].link;
+      $(this).html($(this).html().replace(p, "<a href='"+l+"'>" + t + "</a>"));
+    }
+  });
+  console.log('finished injecting links');
+});
+
+</script>
+

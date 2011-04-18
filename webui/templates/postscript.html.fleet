@@ -6,13 +6,6 @@
 <script src="/js/search.js"></script>
 <!-- end concatenated and minified scripts-->
  
-<script type="text/javascript">
-SyntaxHighlighter.autoloader(
-  'properties /js/shBrushProperties.js'
-);
- 
-SyntaxHighlighter.all();
-</script>
 
 <!--[if lt IE 7 ]>
   <script src="/js/libs/dd_belatedpng.js"></script>
