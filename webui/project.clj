@@ -1,4 +1,5 @@
-(defproject atg-xref-webui "1.0.0-SNAPSHOT"
+(defproject atg-xref-webui
+  :version :git
   :description "Human interface for ATG codebase cross-reference."
   :dependencies [[org.clojure/clojure "1.2.0"]
                  [org.clojure/clojure-contrib "1.2.0"]

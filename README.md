@@ -7,57 +7,50 @@ codebase.
 
 First, run the Solr server that comes with this install:
 
-    cd server
-    java -jar start.jar
+    cd solr
+    ./start_solr.sh
 
 Now, index the ATG codebase from another terminal (Solr will take over
 your first one.)
 
-    cd indexer
-    java -jar atg-xref-1.0.0-SNAPSHOT-standalone.jar ../bestbuy/dotcom/dgt
+    ./bin/indexer ../bestbuy/dotcom/dgt
 
 ## Querying
 
-So far, I haven't put a UI in front of the query engine. You can use
-the Solr [admin GUI][http://localhost:8983/solr/admin] to run some
-queries, if you don't mind reading XML for the results. Try out a
-couple of queries like these examples.
+There's a web UI that runs on your local machine:
 
-* [Modules which require dgt.common][http://localhost:8983/solr/select/?q=required%3Adgt.common]
-* [Values from LIB-COMMON itself][http://localhost:8983/solr/select/?q=LIB-COMMON]
+    ./bin/webui
+
+It runs standalone. You can access it at http://localhost:8080/
 
 ## Deployment Topology
 
-For the time being, all components should be deployed to the same
-host. I haven't yet added a way to configure the Solr URL used by the
-indexer and webui.
+I expect that the "server" will usually just be your own laptop or
+workstation. This also means that the codebase itself should be
+available on that host.
 
-This also means that the codebase itself should be available on that
-host.
-
-I sort of expect that the "server" will usually just be your own
-laptop or workstation.
 
 ## TODO
 
 * General
-** Make search box work
-** Create high-level "what uses?" page.
+    * Create high-level "what uses?" page.
 
 * Components
+    * Graceful handling of dead-end links (components from ATG)
 
 * Java classes
-** Index classes
-** Create class page
-** Index packages
-** Create package page
+    * Create class page
+    * Index packages
+    * Create package page
+    * Graceful handling of "dead-end" classes (classes from ATG, Spring, etc.)
 
 * JSP
-** Look for bean references.
-** Look for B:xxx and E:xxx tags.
-** Look for includes
-** Add JSPs to the home
-** Create JSP page, with syntax highlighting.
+    * Look for bean references.
+    * Look for B:xxx and E:xxx tags.
+    * Look for includes
+    * Add JSPs to the home
+    * Create JSP page, with syntax highlighting.
+    * Integrate Code-o-matic
 
 ## License
 
