@@ -3,10 +3,6 @@
         clojure.contrib.json
         [clojure.java.io :only (file)]))
 
-(defn module-components
-  [qname]
-  (map component-link (solr-query (str "+module:" qname " +component:*"))))
-
 (defn required-by
   [{reqd :required}]
   (if (coll? reqd) reqd (list reqd)))
