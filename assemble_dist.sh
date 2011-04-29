@@ -13,3 +13,4 @@ cp -r solr ${BDIR}
 
 pandoc -o ${BDIR}/readme.html README.md
 (cd build; tar cvzf ../atg-xref-dist.tgz atg-xref-${VERSION})
+(cd build; zip -r ../atg-xref-dist.zip atg-xref-${VERSION})
