@@ -32,7 +32,7 @@ SyntaxHighlighter.all();
 
 var references = [
   <(map (fn [cl] ">
-    { "pat": new RegExp("<(str cl)>", "gm"), "text": "<(str cl)>", "link": "<(str "/classes/" cl)>" },
+    { "pat": new RegExp("<(clojure.contrib.string/replace-str "." "\\\\." cl)>", "gm"), "text": "<(str cl)>", "link": "<(str "/classes/" cl)>" },
   <") (:classes data))>
 
   <(map (fn [c] ">
