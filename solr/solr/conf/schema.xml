@@ -202,6 +202,7 @@
     <field name="module" type="string" indexed="true" stored="true" required="false"/>
     <field name="component" type="string" indexed="true" stored="true" required="false"/>
     <field name="scope" type="string" indexed="true" stored="true" required="false"/>
+    <!-- "instantiates" identifies the class of a component -->
     <field name="instantiates" type="string" indexed="true" stored="true" required="false"/>
 
     <!-- Fields found on classes -->
@@ -211,10 +212,17 @@
     <!-- These fields are shared by components and classes -->
     <field name="body" type="string" indexed="true" stored="true" required="false"/>
 
-    <!-- Components will have other component names here. Classes will have other class names. -->
+    <!-- Components will have other component names here. JSPs will have component names. -->
     <field name="references" type="string" indexed="true" stored="true" required="false" multiValued="true" />
+
+    <!-- Components & JSPs store their source in the 'source' field -->
     <field name="source" type="string" indexed="true" stored="true" required="false" />
 
+    <!-- Fields found on JSPs -->
+    <field name="startCodeTag" type="string" indexed="true" stored="true" required="false" multiValued="true" />
+    <field name="endCodeTag" type="string" indexed="true" stored="true" required="false" multiValued="true" />
+    <!-- If a JSP uses any "@ page import" directives, the imports go here. -->
+    <field name="pageImports" type="string" indexed="false" stored="true" required="false" multiValued="true" />
   </fields>
   
   <uniqueKey>id</uniqueKey>
