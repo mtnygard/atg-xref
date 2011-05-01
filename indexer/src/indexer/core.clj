@@ -31,10 +31,11 @@
   (let [doc (SolrInputDocument.)]
     (doseq [[k v] m]
       (if-not (nil? v)
-        (if (coll? v)
-          (doseq [subval v]
-            (.addField doc (name k) subval))
-          (.addField doc (name k) v))))
+        (cond
+         (coll? v) (doseq [subval v] (.addField doc (name k) subval))
+         (keyword? v) (.addField doc (name k) (name v))
+         (symbol? v)  (.addField doc (name k) (name v))
+         :else (.addField doc (name k) v))))
     doc))
 
 (defn document-for-jsp
@@ -42,6 +43,7 @@
   [mod webm j]
   (let [jsp (parse-jsp mod webm j)]
     {:id (str (:qname mod) ":" webm ":" (jsp-name j))
+     :type :jsp
      :module (:qname mod)
      :name (jsp-name j)
      :body (:body jsp)
@@ -63,6 +65,7 @@
   [mod sect compf]
   (let [comp (parse-component mod sect compf)]
     {:id (str (:qname mod) ":" (:section comp) ":" (:name comp))
+     :type :component
      :module (:qname mod)
      :component (:name comp)
      :instantiates (:$class comp)
@@ -80,6 +83,7 @@
   "Return a map of attributes for a single ATG module"
   [manifest]
   {:id (:qname manifest)
+   :type :module
    :name (:qname manifest)
    :product (:ATG-Product manifest)
    :required (nilsafe-split (:ATG-Required manifest) #" ")

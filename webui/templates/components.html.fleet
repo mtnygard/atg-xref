@@ -5,7 +5,9 @@
     <table id="components-table" class="display" cellpadding="0" cellborder="0" width="90%">
       <thead>
         <tr>
-	  <th width="100%">Component</th>
+	  <th width="50%">Name</th>
+          <th># of Definitions</th>
+          <th>Beans used</th>
         </tr>
       </thead>
       <tbody>
@@ -13,7 +15,9 @@
       </tbody>
       <tfoot>
         <tr>
-	  <th>Component</th>
+	  <th>Name</th>
+          <th># of Definitions</th>
+          <th>Beans used</th>
         </tr>
       </tfoot>
     </table>

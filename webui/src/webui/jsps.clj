@@ -19,7 +19,7 @@
   []
   (json-str {:aaData
              (map (juxt :name :startCodeTag :endCodeTag (comp count :references))
-                  (solr-query "name:\"*.jsp\" or name:\"*.jspf\""))}))
+                  (solr-query "type:jsp"))}))
 
 (defn jsps-page
   "View function to render the page with all JSPs. Returns a map suitable for passing to layout-or-404"

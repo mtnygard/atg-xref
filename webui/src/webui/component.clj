@@ -17,8 +17,14 @@
 (defn components-api
   "Return all components known to Solr, as a single JSON object. Data is an array, under the key 'aaData'."
   []
-  (json-str {:aaData
-             (partition 1 (set (map :component (solr-query "component:*"))))}))
+  (let [foldr (fn [res {comp :component refs :references}]
+                (-> res
+                 (assoc-in [comp :definitions] (inc (get-in res [comp :definitions] 0)))
+                 (assoc-in [comp :references] (+ (count refs) (get-in res [comp :references] 0)))))
+        solr-docs (solr-query "type:\"component\" && component:*")
+        summary (reduce foldr {} solr-docs)]
+    (clojure.pprint/pprint summary)
+    (json-str {:aaData (map (fn [[c {d :definitions r :references}]] [c d r]) summary)})))
 
 (defn components-in-module
   "Return the components within the named module. Data is an array, under the key 'aaData'."

@@ -5,7 +5,7 @@
     <table id="jsps-table" class="display" cellpadding="0" cellborder="0" width="90%">
       <thead>
         <tr>
-	  <th>Name</th>
+	  <th width="50%">Name</th>
           <th>Start tag</th>
           <th>End tag</th>
           <th>Beans used</th>
@@ -16,7 +16,7 @@
       </tbody>
       <tfoot>
         <tr>
-	  <th>Component</th>
+	  <th>Name</th>
           <th>Start tag</th>
           <th>End tag</th>
           <th>Beans used</th>
@@ -38,15 +38,6 @@
           return '<a href="/jsp/' + oObj.aData[0] + '">' + oObj.aData[0] + '</a>';
         },
         "aTargets": [0]
-      },
-      {
-        "aTargets": [1]
-      },
-      {
-        "aTargets": [2]
-      },
-      {
-        "aTargets": [3]
       }
     ]
           

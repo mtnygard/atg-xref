@@ -11,14 +11,14 @@
   [mod]
   (set (map :name (solr-query (str "required:\"" (:name mod) "\"")))))
 
-(defn modules-named [pat] (solr-query (str "name:" pat)))
+(defn modules-named [pat] (solr-query (str "type:\"module\" && name:" pat)))
 
 (defn modules-crumbs [] (conj (home-crumbs) (crumb "/modules" "Modules")))
 
 (defn module-crumbs [mod] (conj (modules-crumbs) (crumb (str "/module/" mod) mod)))
 
 (defn modules-api
-  [& pat] (json-str {:aaData (partition 1 (set (map :name (solr-query "name:*"))))}))
+  [& pat] (json-str {:aaData (partition 1 (set (map :name (modules-named (or pat "*")))))}))
 
 (defn module-page [qname]
   (let [mod (first (modules-named qname))]
