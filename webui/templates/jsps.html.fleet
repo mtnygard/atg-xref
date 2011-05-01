@@ -1,0 +1,54 @@
+<div id="jsps">
+  <h2><a href="/jsps">JSP Files</a></h2>
+  
+  <div>
+    <table id="jsps-table" class="display" cellpadding="0" cellborder="0" width="90%">
+      <thead>
+        <tr>
+	  <th>Name</th>
+          <th>Start tag</th>
+          <th>End tag</th>
+          <th>Beans used</th>
+        </tr>
+      </thead>
+      <tbody>
+
+      </tbody>
+      <tfoot>
+        <tr>
+	  <th>Component</th>
+          <th>Start tag</th>
+          <th>End tag</th>
+          <th>Beans used</th>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+</div>
+
+<script type="text/javascript" lang="javascript">
+  $('#jsps-table').dataTable( {
+    "bProcessing": true,
+    "iDisplayLength": 25,
+    "sPaginationType": "full_numbers",
+    "sAjaxSource": "/v1/jsps",
+    "aoColumnDefs": [
+      {
+        "fnRender": function (oObj) {
+          return '<a href="/jsp/' + oObj.aData[0] + '">' + oObj.aData[0] + '</a>';
+        },
+        "aTargets": [0]
+      },
+      {
+        "aTargets": [1]
+      },
+      {
+        "aTargets": [2]
+      },
+      {
+        "aTargets": [3]
+      }
+    ]
+          
+  });
+</script>

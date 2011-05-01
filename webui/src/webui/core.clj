@@ -1,5 +1,5 @@
 (ns webui.core
-  (:use [webui nav search module component classes]
+  (:use [webui nav search module component classes jsps]
         [clojure.java.io]
         [compojure core response]
         [ring.adapter.jetty :only [run-jetty]]
@@ -30,11 +30,12 @@
   (GET "/component/*" {{compn "*"} :route-params} (layout-or-404 (component-page compn)))
   (GET "/classes" [] (layout-or-404 (classes-page)))
   (GET ["/classes/:classname" :classname #".*"] [classname] (layout-or-404 (class-page classname)))
+  (GET "/jsps" [] (layout-or-404 (jsps-page)))
   (GET "/v1/modules" [] (modules-api))
   (GET "/v1/components" [] (components-api))
   (GET ["/v1/components/module/:qname" :qname #".*"] [qname] (components-in-module qname))
   (GET "/v1/classes" [] (classes-api))
-  (GET "/v1/jsps" [] "<p>Coming soon...</p>")
+  (GET "/v1/jsps" [] (jsps-api))
   (route/files "/")
   (route/not-found (file "public/404.html")))
 

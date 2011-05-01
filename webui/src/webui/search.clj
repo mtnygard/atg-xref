@@ -33,7 +33,10 @@
           (assoc! res (keyword field) val))))
     (persistent! res)))
 
-(defn solr-query [s]
-  (map solr-results->map (query-results
-                          (-> (SolrQuery. s)
-                              (.setRows Integer/MAX_VALUE)))))
+(defn solr-query
+  ([s n]
+     (map solr-results->map (query-results
+                             (-> (SolrQuery. s)
+                                 (.setRows n)))))
+  ([s]
+     (solr-query s Integer/MAX_VALUE)))

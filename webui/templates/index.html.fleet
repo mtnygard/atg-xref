@@ -1,6 +1,7 @@
-<(view/modules)>
+<(view/jsps)>
 
 <(view/components)>
 
 <(view/classes)>
 
+<(view/modules)>
