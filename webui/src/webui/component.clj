@@ -23,7 +23,6 @@
                  (assoc-in [comp :references] (+ (count refs) (get-in res [comp :references] 0)))))
         solr-docs (solr-query "type:\"component\" && component:*")
         summary (reduce foldr {} solr-docs)]
-    (clojure.pprint/pprint summary)
     (json-str {:aaData (map (fn [[c {d :definitions r :references}]] [c d r]) summary)})))
 
 (defn components-in-module
