@@ -10,7 +10,7 @@
 
 (defn page-imports
   [body]
-  (re-extract #"<%@\s*page\s+import\s*=\s*\"(.*)\"" body))
+  (re-extract #"<%@\s*page\s+import\s*=\s*\"(.*)(.*)?\"" body))
 
 (defn start-code-tag
   [body]

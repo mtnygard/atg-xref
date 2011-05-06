@@ -26,7 +26,7 @@ SyntaxHighlighter.all();
 
 var references = [
   <(map (fn [p] ">
-    { "pat": new RegExp("<(str p)>", "gm"), "text": "<(str p)>", "link": "<(str "/jsp/" p)>" },   
+    { "pat": "<(str p)>", "text": "<(str p)>", "link": "<(str "/jsp/" p)>" },   
   <") (seq (:jsp-uses data)))>
 
   <(map (fn [c] ">
