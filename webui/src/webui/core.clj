@@ -31,6 +31,7 @@
   (GET "/classes" [] (layout-or-404 (classes-page)))
   (GET ["/classes/:classname" :classname #".*"] [classname] (layout-or-404 (class-page classname)))
   (GET "/jsps" [] (layout-or-404 (jsps-page)))
+  (GET ["/jsp/:jsp" :jsp #".*"] [jsp] (layout-or-404 (jsp-page jsp)))
   (GET "/v1/modules" [] (modules-api))
   (GET "/v1/components" [] (components-api))
   (GET ["/v1/components/module/:qname" :qname #".*"] [qname] (components-in-module qname))

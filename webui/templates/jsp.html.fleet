@@ -1,0 +1,50 @@
+<div id="jsp">
+  <h1><(:name data)></h1>
+
+  <div>
+    <h2>Definitions</h2>
+    
+    <(map (fn [d] ">
+      <div class="source">
+        <div class="pathname"><(:source data)></div>
+           <pre class="brush: xml"><(escape-xml (:body d))></pre>
+        </div>
+      </div>
+    <") (:jsp-defs data))>
+  </div>
+</div>
+
+<script type="text/javascript">
+SyntaxHighlighter.autoloader(
+  'xml /js/shBrushXml.js'
+);
+
+SyntaxHighlighter.defaults['auto-links'] = true;
+
+SyntaxHighlighter.all();
+
+
+var references = [
+  <(map (fn [p] ">
+    { "pat": new RegExp("<(str p)>", "gm"), "text": "<(str p)>", "link": "<(str "/jsp/" p)>" },   
+  <") (seq (:jsp-uses data)))>
+
+  <(map (fn [c] ">
+    { "pat": new RegExp("<(str c)>", "gm"), "text": "<(str c)>", "link": "<(str "/component/" c)>" },
+  <") (seq (:bean-uses data)))>
+];
+
+$(window).load(function() {
+  $(".source").each(function() {
+    for(var i = 0; i < references.length; i++) {
+      var p = references[i].pat;
+      var t = references[i].text;
+      var l = references[i].link;
+      $(this).html($(this).html().replace(p, "<a href='"+l+"'>" + t + "</a>"));
+    }
+  });
+  console.log('finished injecting links');
+});
+
+</script>
+
