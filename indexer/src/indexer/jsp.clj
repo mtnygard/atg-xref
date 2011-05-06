@@ -27,7 +27,7 @@
 (defn bean-references
   [body]
   (union
-   (re-extract #"dsp:importbean\s+bean=\"(.*)\"" body)
+   (re-extract #"dsp:importbean\s+bean=\"([^\"]*)\"" body)
    (re-extract #"dsp:droplet\s+name=\"(/[^\"]*)\"" body)))
 
 (defstruct jsp-info :name :body :page-imports :start-code-tag :end-code-tag :taglibs :references)

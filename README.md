@@ -39,18 +39,18 @@ available on that host.
     * Graceful handling of dead-end links (components from ATG)
 
 * Java classes
-    * Create class page
-    * Index packages
-    * Create package page
     * Graceful handling of "dead-end" classes (classes from ATG, Spring, etc.)
 
 * JSP
-    * Look for bean references.
-    * Look for B:xxx and E:xxx tags.
-    * Look for includes
-    * Add JSPs to the home
     * Create JSP page, with syntax highlighting.
+    * Look for bean references.
+    * Display module name
     * Integrate Code-o-matic
+
+* Locate Problems
+    * JSP tag problems: missing start/end, duplicate start/end, too many start/end
+    * Unreferenced JSPs. No "include" path from root page.
+    * Same java package & class in multiple source files.
 
 ## License
 

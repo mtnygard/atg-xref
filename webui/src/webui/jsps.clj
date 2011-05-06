@@ -17,9 +17,14 @@
 (defn jsps-api
   "Get a JSON string with a tuple of {name, start tag, end tag, # of beans} for each JSP"
   []
-  (json-str {:aaData
-             (map (juxt :name :startCodeTag :endCodeTag (comp count :references))
-                  (solr-query "type:jsp"))}))
+  (let [reference-count (fn [{refs :references}]
+                          (cond
+                           (nil? refs) 0
+                           (coll? refs) (count refs)
+                           :else 1))]
+    (json-str {:aaData
+               (map (juxt :name :startCodeTag :endCodeTag reference-count)
+                    (solr-query "type:jsp"))})))
 
 (defn jsps-page
   "View function to render the page with all JSPs. Returns a map suitable for passing to layout-or-404"
