@@ -1,7 +1,12 @@
 #! /bin/bash
 
-VERSION=0.1.1
+VERSION=$1
+
+git checkout $1 || exit
+
 BDIR=build/atg-xref-${VERSION}
+
+[ -d ${BDIR} ] && rm -rf ${BDIR}
 
 mkdir -p ${BDIR}/bin
 
@@ -18,5 +23,5 @@ mkdir ${BDIR}/solr/logs
 cp README.md ${BDIR}/
 [ -x `which pandoc` ] && pandoc -o ${BDIR}/readme.html README.md
 
-(cd build; tar cvzf ../atg-xref-dist.tgz atg-xref-${VERSION})
-(cd build; zip -r ../atg-xref-dist.zip atg-xref-${VERSION})
+(cd build; tar cvzf ../atg-xref-${VERSION}.tgz atg-xref-${VERSION})
+(cd build; zip -r ../atg-xref-${VERSION}.zip atg-xref-${VERSION})
